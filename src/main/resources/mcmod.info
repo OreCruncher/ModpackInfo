@@ -1,0 +1,14 @@
+[
+	{
+		"modid": "mpinfo",
+		"name": "Modpack Info",
+		"description": "Provides modpack info via log files and ingame commands",
+		"version": "0.0.1",
+		"credits": "Inspired by Vazkii's ModLister (http://www.minecraftforum.net/topic/1828188-mod-lister-lists-the-mods-you-are-running/)",
+		"logoFile": "",
+		"mcversion": "1.7.10",
+		"authorList": [ "OreCruncher" ],
+		"parent":"",
+		"screenshots": []
+	}
+]
