@@ -46,13 +46,13 @@ public enum FormatterType {
 	/*
 	 * TEXT causes the output to be generated in plain text
 	 */
-	TEXT("text", "txt"),
+	TEXT("colored", "txt"),
 
 	/*
 	 * The output is generated with BBCode tags suitable for Internet forums
 	 * that support BBCode.
 	 */
-	BBCODE("bbcode", "txt"),
+	BBCODE("colored", "txt"),
 
 	/*
 	 * The output is generated as XML. It is assumed that some other post

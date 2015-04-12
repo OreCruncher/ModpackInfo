@@ -52,6 +52,7 @@ import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.Logger;
 import org.blockartistry.mod.ModpackInfo.Player.PlayerLoginEventHandler;
 import org.blockartistry.mod.ModpackInfo.Xml.XmlConverter;
+import org.blockartistry.mod.ModpackInfo.colorcode.ColorCodeProvider;
 import org.blockartistry.mod.ModpackInfo.commands.CommandHelper;
 import org.w3c.dom.Document;
 
@@ -90,7 +91,8 @@ public final class ModpackInfo {
 	private File mcDir;
 	private Logger log;
 
-	protected PackInfo info = new PackInfo();
+	protected PackInfo info;
+	protected ColorCodeProvider cc;
 
 	public PackInfo getPackInfo() {
 		return info;
@@ -117,8 +119,6 @@ public final class ModpackInfo {
 
 		try {
 
-			info.init(config);
-
 			fType = FormatterType.getValueByName(config.get(
 					Configuration.CATEGORY_GENERAL, TEXT_OPTION_FORMATTER_TYPE,
 					DEFAULT_FORMATTER_TYPE, TEXT_OPTION_FORMATTER_TYPE_COMMENT)
@@ -130,6 +130,12 @@ public final class ModpackInfo {
 						DEFAULT_FORMATTER_TYPE);
 				fType = FormatterType.getValueByName(DEFAULT_FORMATTER_TYPE);
 			}
+
+			info = new PackInfo();
+			cc = ColorCodeProvider.factory(fType);
+
+			PackInfo.init(config);
+			cc.init(config);
 
 			displayLoginGreeting = config.get(Configuration.CATEGORY_GENERAL,
 					TEXT_OPTION_DISPLAY_GREETING, DEFAULT_DISPLAY_GREETING,
@@ -188,6 +194,7 @@ public final class ModpackInfo {
 			StreamResult result = new StreamResult(new File(mcDir, fileName));
 
 			// Transform!
+			cc.applyColorCodes(xformer);
 			xformer.transform(source, result);
 
 		} catch (TransformerException e) {

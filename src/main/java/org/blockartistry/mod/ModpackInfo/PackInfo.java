@@ -38,12 +38,12 @@ public class PackInfo {
 
 	private static final String CATEGORY_MODPACK_INFO = "modpackinfo";
 
-	private String modpackName;
-	private String modpackVersion;
-	private String modpackDescription;
-	private String modpackCredits;
-	private String modpackAuthors;
-	private String modpackWebsite;
+	private static String modpackName;
+	private static String modpackVersion;
+	private static String modpackDescription;
+	private static String modpackCredits;
+	private static String modpackAuthors;
+	private static String modpackWebsite;
 
 	/**
 	 * @return The name of the modpack as defined in the configuration file
@@ -131,12 +131,6 @@ public class PackInfo {
 	}
 
 	public PackInfo() {
-		modpackName = null;
-		modpackVersion = null;
-		modpackDescription = null;
-		modpackCredits = null;
-		modpackAuthors = null;
-		modpackWebsite = null;
 	}
 
 	/**
@@ -144,20 +138,20 @@ public class PackInfo {
 	 * 
 	 * @param config
 	 */
-	public void init(Configuration config) {
+	public static void init(Configuration config) {
 
-		this.modpackName = (config.get(CATEGORY_MODPACK_INFO, "name", "",
+		modpackName = (config.get(CATEGORY_MODPACK_INFO, "name", "",
 				"Name of the modpack").getString());
-		this.modpackVersion = (config.get(CATEGORY_MODPACK_INFO, "version", "",
+		modpackVersion = (config.get(CATEGORY_MODPACK_INFO, "version", "",
 				"Version of the modpack").getString());
-		this.modpackDescription = (config.get(CATEGORY_MODPACK_INFO,
-				"description", "", "Description of the modpack").getString());
-		this.modpackCredits = (config.get(CATEGORY_MODPACK_INFO, "credits", "",
+		modpackDescription = (config.get(CATEGORY_MODPACK_INFO, "description",
+				"", "Description of the modpack").getString());
+		modpackCredits = (config.get(CATEGORY_MODPACK_INFO, "credits", "",
 				"Credits of the modpack").getString());
-		this.modpackAuthors = String.join(",",
+		modpackAuthors = String.join(",",
 				(config.getStringList("authors", CATEGORY_MODPACK_INFO,
 						new String[0], "Authors of the modpack")));
-		this.modpackWebsite = (config.get(CATEGORY_MODPACK_INFO, "website", "",
+		modpackWebsite = (config.get(CATEGORY_MODPACK_INFO, "website", "",
 				"Modpack web address").getString());
 	}
 }
