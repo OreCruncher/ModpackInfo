@@ -27,6 +27,13 @@ package org.blockartistry.mod.ModpackInfo;
 
 import net.minecraftforge.common.config.Configuration;
 
+/**
+ * @author OreCruncher
+ * 
+ *         PackInfo will hold modpack description information obtained from the
+ *         mod configuration file. This data is specified by the modpack author.
+ *
+ */
 public class PackInfo {
 
 	private static final String CATEGORY_MODPACK_INFO = "modpackinfo";
@@ -38,74 +45,87 @@ public class PackInfo {
 	private String modpackAuthors;
 	private String modpackWebsite;
 
+	/**
+	 * @return The name of the modpack as defined in the configuration file
+	 */
 	public String getName() {
 		return modpackName;
 	}
 
-	public void setName(String name) {
-		modpackName = name;
-	}
-
+	/**
+	 * @return Indicates whether the modpack name is valid
+	 */
 	public boolean hasValidName() {
 		return modpackName != null && !modpackName.isEmpty();
 	}
 
+	/**
+	 * @return The version of the modpack as defined in the configuration file
+	 */
 	public String getVersion() {
 		return modpackVersion;
 	}
 
-	public void setVersion(String version) {
-		modpackVersion = version;
-	}
-
+	/**
+	 * @return Indicates whether the modpack version is valid
+	 */
 	public boolean hasValidVersion() {
 		return modpackVersion != null && !modpackVersion.isEmpty();
 	}
 
+	/**
+	 * @return The description of the modpack as defined in the configuration
+	 *         file
+	 */
 	public String getDescription() {
 		return modpackDescription;
 	}
 
-	public void setDescription(String description) {
-		modpackDescription = description;
-	}
-
+	/**
+	 * @return Indicates whether the modpack description is valid
+	 */
 	public boolean hasValidDescription() {
 		return modpackDescription != null && !modpackDescription.isEmpty();
 	}
 
+	/**
+	 * @return The credits of the modpack as defined in the configuration file
+	 */
 	public String getCredits() {
 		return modpackCredits;
 	}
 
-	public void setCredits(String credits) {
-		modpackCredits = credits;
-	}
-
+	/**
+	 * @return Indicates whether the modpack credits is valid
+	 */
 	public boolean hasValidCredits() {
 		return modpackCredits != null && !modpackCredits.isEmpty();
 	}
 
+	/**
+	 * @return The authors of the modpack as defined in the configuration file
+	 */
 	public String getAuthors() {
 		return modpackAuthors;
 	}
 
-	public void setAuthors(String[] authors) {
-		modpackAuthors = String.join(", ", authors);
-	}
-
+	/**
+	 * @return Indicates whether the modpack authors is valid
+	 */
 	public boolean hasValidAuthors() {
 		return modpackAuthors != null && !modpackAuthors.isEmpty();
 	}
 
+	/**
+	 * @return The website of the modpack as defined in the configuration file
+	 */
 	public String getWebsite() {
 		return modpackWebsite;
 	}
 
-	public void setWebsite(String website) {
-		modpackWebsite = website;
-	}
-
+	/**
+	 * @return Indicates whether the modpack website is valid
+	 */
 	public boolean hasValidWebsite() {
 		return modpackWebsite != null && !modpackWebsite.isEmpty();
 	}
@@ -119,19 +139,25 @@ public class PackInfo {
 		modpackWebsite = null;
 	}
 
+	/**
+	 * Initializes a PackInfo instances from the specified configuration file.
+	 * 
+	 * @param config
+	 */
 	public void init(Configuration config) {
 
-		setName(config.get(CATEGORY_MODPACK_INFO, "name", "",
+		this.modpackName = (config.get(CATEGORY_MODPACK_INFO, "name", "",
 				"Name of the modpack").getString());
-		setVersion(config.get(CATEGORY_MODPACK_INFO, "version", "",
+		this.modpackVersion = (config.get(CATEGORY_MODPACK_INFO, "version", "",
 				"Version of the modpack").getString());
-		setDescription(config.get(CATEGORY_MODPACK_INFO, "description", "",
-				"Description of the modpack").getString());
-		setCredits(config.get(CATEGORY_MODPACK_INFO, "credits", "",
+		this.modpackDescription = (config.get(CATEGORY_MODPACK_INFO,
+				"description", "", "Description of the modpack").getString());
+		this.modpackCredits = (config.get(CATEGORY_MODPACK_INFO, "credits", "",
 				"Credits of the modpack").getString());
-		setAuthors(config.getStringList("authors", CATEGORY_MODPACK_INFO,
-				new String[0], "Authors of the modpack"));
-		setWebsite(config.get(CATEGORY_MODPACK_INFO, "website", "",
+		this.modpackAuthors = String.join(",",
+				(config.getStringList("authors", CATEGORY_MODPACK_INFO,
+						new String[0], "Authors of the modpack")));
+		this.modpackWebsite = (config.get(CATEGORY_MODPACK_INFO, "website", "",
 				"Modpack web address").getString());
 	}
 }

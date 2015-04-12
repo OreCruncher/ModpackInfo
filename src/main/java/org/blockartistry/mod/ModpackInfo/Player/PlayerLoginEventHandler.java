@@ -33,7 +33,14 @@ import net.minecraft.util.EnumChatFormatting;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
 
-public class PlayerEventHandler {
+/**
+ * @author OreCruncher
+ * 
+ *         Event handler for detecting player login. When detected the player
+ *         will be sent a greeting that is derived from the modpack information
+ *         provided by the modpack authors.
+ * */
+public class PlayerLoginEventHandler {
 
 	/*
 	 * Message to display to the player when they log in. An initial login will

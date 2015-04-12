@@ -36,6 +36,12 @@ import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.util.EnumChatFormatting;
 
+/**
+ * @author OreCruncher
+ * 
+ *         Implementation of the /mpinfo command.
+ *
+ */
 public class CommandMpinfo implements ICommand {
 
 	private String[] mpinfoMessage = null;

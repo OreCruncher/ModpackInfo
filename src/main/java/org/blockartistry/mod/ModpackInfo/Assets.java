@@ -30,6 +30,14 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import net.minecraft.launchwrapper.Launch;
 
+/**
+ * @author OreCruncher
+ * 
+ *         A set of helper methods that facilitates access to resource
+ *         information used by the mod. It handles the differences of accessing
+ *         resources between the development environment and the jar file.
+ *
+ */
 public class Assets {
 
 	private static final boolean developmentEnvironment = (Boolean) Launch.blackboard
@@ -59,10 +67,23 @@ public class Assets {
 		return builder.toString();
 	}
 
+	/**
+	 * Indicates if the mod is running in a development environment (e.g. an
+	 * IDE).
+	 * 
+	 * @return true if the mod is running in a development environment, false
+	 *         otherwise.
+	 */
 	public static boolean runningAsDevelopment() {
 		return developmentEnvironment;
 	}
 
+	/**
+	 * Determines the root of the asset resource path to use. It takes into
+	 * account whether or not the mod is running in a development environment.
+	 * 
+	 * @return Root path to assets for the mod
+	 */
 	public static String getAssetsRootPath() {
 
 		if (assetPath == null) {
@@ -74,12 +95,30 @@ public class Assets {
 		return assetPath;
 	}
 
+	/**
+	 * Helper method that calculates a path to the specified asset. This method
+	 * assumes that the assetFolder is off the asset root path.
+	 * 
+	 * @param assetFolder
+	 *            The path fragment where the resource can be found
+	 * @param asset
+	 *            The name of the asset that is of interest
+	 * @return A fully specified path to the asset from the asset root
+	 */
 	public static String getAssetPath(String assetFolder, String asset) {
 		if (runningAsDevelopment())
 			return combine(getAssetsRootPath(), asset);
 		return combine(getAssetsRootPath(), assetFolder, asset);
 	}
 
+	/**
+	 * Returns a reader for the Xsl translation sheet associated with the
+	 * specified formatter.
+	 * 
+	 * @param formatter
+	 *            Formatter that is of interest
+	 * @return BufferedReader for the associated Xsl
+	 */
 	public static BufferedReader getTransformSheet(FormatterType formatter) {
 
 		String assetPath = getAssetPath("xlatesheets",

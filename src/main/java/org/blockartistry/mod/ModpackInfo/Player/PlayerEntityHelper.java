@@ -28,8 +28,22 @@ package org.blockartistry.mod.ModpackInfo.Player;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.util.ChatComponentText;
 
+/**
+ * @author OreCruncher
+ *
+ *         Helper methods that facilitate access to the Forge player entity.
+ */
 public class PlayerEntityHelper {
 
+	/**
+	 * Sends one or more messages to the specified player. It is assumed that
+	 * the messages are split at newline boundaries.
+	 * 
+	 * @param player
+	 *            Player that is to receive the messages.
+	 * @param lines
+	 *            The messages to send.
+	 */
 	public static void sendChatMessage(ICommandSender player, String[] lines) {
 		if (lines == null || lines.length == 0)
 			return;
@@ -39,6 +53,15 @@ public class PlayerEntityHelper {
 		}
 	}
 
+	/**
+	 * Sends a message to the specified player. The routine will split the
+	 * message at newline boundaries of needed.
+	 * 
+	 * @param player
+	 *            Player that is to receive the message.
+	 * @param message
+	 *            The message to send.
+	 */
 	public static void sendChatMessage(ICommandSender player, String message) {
 
 		if (message == null || message.isEmpty())

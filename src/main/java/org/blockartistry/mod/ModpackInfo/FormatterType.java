@@ -27,6 +27,20 @@ package org.blockartistry.mod.ModpackInfo;
 
 import java.util.HashMap;
 
+/**
+ * @author OreCruncher
+ *
+ *         Defines the various output file formats that are supported. For each
+ *         value there are two properties that can be specified:
+ * 
+ *         xsl: the name of the translation sheet defined in resources that will
+ *         be used to perform a transformation when writing information to the
+ *         output log. Specifying null will default to "text".
+ * 
+ *         ext: the filename extension that will be used when writing the output
+ *         file to disk. Specifying null will default to "txt".
+ *
+ */
 public enum FormatterType {
 
 	/*

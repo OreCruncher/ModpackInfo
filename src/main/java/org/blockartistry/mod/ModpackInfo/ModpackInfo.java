@@ -50,11 +50,18 @@ import net.minecraftforge.common.config.Configuration;
 
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.Logger;
-import org.blockartistry.mod.ModpackInfo.Player.PlayerEventHandler;
+import org.blockartistry.mod.ModpackInfo.Player.PlayerLoginEventHandler;
 import org.blockartistry.mod.ModpackInfo.Xml.XmlConverter;
 import org.blockartistry.mod.ModpackInfo.commands.CommandHelper;
 import org.w3c.dom.Document;
 
+/**
+ * @author OreCruncher
+ * 
+ *         Main class of the mod. Handles the necessary "glue" into the Forge
+ *         framework as well as performing the high level tasks of generating
+ *         the modpack information to a log file on disk.
+ */
 @Mod(modid = ModpackInfo.MOD_ID, useMetadata = true, dependencies = ModpackInfo.DEPENDENCIES, version = ModpackInfo.VERSION)
 public final class ModpackInfo {
 
@@ -90,8 +97,8 @@ public final class ModpackInfo {
 	}
 
 	private FormatterType fType = FormatterType.TEXT;
-	private boolean displayLoginGreeting = true;
-	private boolean enableCommands = false;
+	private boolean displayLoginGreeting = DEFAULT_DISPLAY_GREETING;
+	private boolean enableCommands = DEFAULT_ENABLE_COMMANDS;
 
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event) {
@@ -148,7 +155,7 @@ public final class ModpackInfo {
 		if (displayLoginGreeting) {
 			log.info("Registering for player login events");
 			FMLCommonHandler.instance().bus()
-					.register(new PlayerEventHandler());
+					.register(new PlayerLoginEventHandler());
 		} else {
 			log.info("Not registering for player login events");
 		}

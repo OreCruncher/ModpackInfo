@@ -27,8 +27,21 @@ package org.blockartistry.mod.ModpackInfo.commands;
 
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
 
+/**
+ * @author OreCruncher
+ * 
+ *         Helper methods that facilitate registration and use of the Forge
+ *         command environment.
+ *
+ */
 public class CommandHelper {
 
+	/**
+	 * Registers command event handlers with Forge.
+	 * 
+	 * @param event
+	 *            The FML event that provides access to the command environment
+	 */
 	public static void registerCommands(FMLServerStartingEvent event) {
 		event.registerServerCommand(new CommandMpinfo());
 	}
