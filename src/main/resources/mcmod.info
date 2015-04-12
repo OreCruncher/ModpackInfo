@@ -2,7 +2,7 @@
 	{
 		"modid": "mpinfo",
 		"name": "Modpack Info",
-		"description": "Provides modpack info via log files and ingame commands",
+		"description": "Provides modpack info via log files and in-game commands",
 		"version": "0.0.1",
 		"credits": "Inspired by Vazkii's ModLister (http://www.minecraftforum.net/topic/1828188-mod-lister-lists-the-mods-you-are-running/)",
 		"url": "https://github.com/OreCruncher/ModpackInfo/wiki",
