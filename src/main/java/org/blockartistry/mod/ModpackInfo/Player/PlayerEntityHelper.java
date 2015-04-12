@@ -23,7 +23,7 @@
  * THE SOFTWARE.
  */
 
-package org.blockartistry.mod.ModpackInfo;
+package org.blockartistry.mod.ModpackInfo.Player;
 
 import net.minecraft.command.ICommandSender;
 import net.minecraft.util.ChatComponentText;

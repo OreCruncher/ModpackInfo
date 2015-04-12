@@ -50,6 +50,8 @@ import net.minecraftforge.common.config.Configuration;
 
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.Logger;
+import org.blockartistry.mod.ModpackInfo.Player.PlayerEventHandler;
+import org.blockartistry.mod.ModpackInfo.Xml.XmlConverter;
 import org.blockartistry.mod.ModpackInfo.commands.CommandHelper;
 import org.w3c.dom.Document;
 

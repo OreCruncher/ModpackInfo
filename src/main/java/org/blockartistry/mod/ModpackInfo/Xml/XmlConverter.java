@@ -23,13 +23,14 @@
  * THE SOFTWARE.
  */
 
-package org.blockartistry.mod.ModpackInfo;
+package org.blockartistry.mod.ModpackInfo.Xml;
 
 import java.util.List;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.blockartistry.mod.ModpackInfo.PackInfo;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Text;

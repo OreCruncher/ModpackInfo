@@ -23,7 +23,10 @@
  * THE SOFTWARE.
  */
 
-package org.blockartistry.mod.ModpackInfo;
+package org.blockartistry.mod.ModpackInfo.Player;
+
+import org.blockartistry.mod.ModpackInfo.ModpackInfo;
+import org.blockartistry.mod.ModpackInfo.PackInfo;
 
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.EnumChatFormatting;

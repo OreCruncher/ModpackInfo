@@ -30,7 +30,7 @@ import java.util.List;
 
 import org.blockartistry.mod.ModpackInfo.ModpackInfo;
 import org.blockartistry.mod.ModpackInfo.PackInfo;
-import org.blockartistry.mod.ModpackInfo.PlayerEntityHelper;
+import org.blockartistry.mod.ModpackInfo.Player.PlayerEntityHelper;
 
 import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
