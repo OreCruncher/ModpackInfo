@@ -52,7 +52,7 @@ import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.Logger;
 import org.blockartistry.mod.ModpackInfo.Player.PlayerLoginEventHandler;
 import org.blockartistry.mod.ModpackInfo.Xml.XmlConverter;
-import org.blockartistry.mod.ModpackInfo.colorcode.ColorCodeProvider;
+import org.blockartistry.mod.ModpackInfo.attributes.AttributeProvider;
 import org.blockartistry.mod.ModpackInfo.commands.CommandHelper;
 import org.w3c.dom.Document;
 
@@ -92,7 +92,7 @@ public final class ModpackInfo {
 	private Logger log;
 
 	protected PackInfo info;
-	protected ColorCodeProvider cc;
+	protected AttributeProvider cc;
 
 	public PackInfo getPackInfo() {
 		return info;
@@ -132,7 +132,7 @@ public final class ModpackInfo {
 			}
 
 			info = new PackInfo();
-			cc = ColorCodeProvider.factory(fType);
+			cc = fType.getColorCodeType().getProvider();
 
 			PackInfo.init(config);
 			cc.init(config);
@@ -194,7 +194,7 @@ public final class ModpackInfo {
 			StreamResult result = new StreamResult(new File(mcDir, fileName));
 
 			// Transform!
-			cc.applyColorCodes(xformer);
+			cc.applyAttributeCodes(xformer);
 			xformer.transform(source, result);
 
 		} catch (TransformerException e) {

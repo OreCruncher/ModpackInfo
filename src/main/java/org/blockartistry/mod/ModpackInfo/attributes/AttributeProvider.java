@@ -23,23 +23,19 @@
  * THE SOFTWARE.
  */
 
-package org.blockartistry.mod.ModpackInfo.colorcode;
+package org.blockartistry.mod.ModpackInfo.attributes;
 
 import javax.xml.transform.Transformer;
-
-import org.blockartistry.mod.ModpackInfo.FormatterType;
 
 import net.minecraftforge.common.config.Configuration;
 
 /**
  * @author OreCruncher
  *
- *         An instance of this class provides basic color support for plain text
- *         output files. Specifically, there will be no special tagging of the
- *         output to cause text attribute changes. Just plain old text.
+ *         This abstract class defines the base of any AttributeProvider.
  *
  */
-public class ColorCodeProvider {
+public abstract class AttributeProvider {
 
 	protected static final String TEXT_DEFAULT = "";
 	protected static final String TEXT_MODPACK = "modpack";
@@ -62,22 +58,18 @@ public class ColorCodeProvider {
 		return String.join(".", category, field, orientation);
 	}
 
-	public static ColorCodeProvider factory(FormatterType fType) {
-		if (fType == FormatterType.BBCODE)
-			return new BBCodeColorCodeProvider();
+	/**
+	 * Initializes an AttributeProvider based on the content of the
+	 * configuration file.
+	 * 
+	 * @param config Reference to the configuration object containing parameter information
+	 */
+	public abstract void init(Configuration config);
 
-		return new ColorCodeProvider();
-	}
-
-	public void init(Configuration config) {
-		
-		// Do nothing - this provider does not use any codes
-
-	}
-
-	public void applyColorCodes(Transformer transformer) {
-		
-		// Do nothing - this provider does not use any codes
-
-	}
+	/**
+	 * Called by the generation logic to apply attributes to the provider Transformer.
+	 * 
+	 * @param transformer Transformer to receive the attribute information.
+	 */
+	public abstract void applyAttributeCodes(Transformer transformer);
 }

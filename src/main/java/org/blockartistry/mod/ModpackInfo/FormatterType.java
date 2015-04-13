@@ -27,6 +27,8 @@ package org.blockartistry.mod.ModpackInfo;
 
 import java.util.HashMap;
 
+import org.blockartistry.mod.ModpackInfo.attributes.AttributeProviderType;
+
 /**
  * @author OreCruncher
  *
@@ -46,30 +48,31 @@ public enum FormatterType {
 	/*
 	 * TEXT causes the output to be generated in plain text
 	 */
-	TEXT("colored", "txt"),
+	TEXT("colored", "txt", AttributeProviderType.TEXT),
 
 	/*
 	 * The output is generated with BBCode tags suitable for Internet forums
 	 * that support BBCode.
 	 */
-	BBCODE("colored", "txt"),
+	BBCODE("colored", "txt", AttributeProviderType.BBCODE),
 
 	/*
 	 * The output is generated as XML. It is assumed that some other post
 	 * process will pick up the file.
 	 */
-	XML("xml", "xml"),
+	XML("xml", "xml", AttributeProviderType.NONE),
 
 	/*
 	 * The output is generated as JSON.
 	 */
-	JSON("json", "json");
+	JSON("json", "json", AttributeProviderType.NONE);
 
 	private static final HashMap<String, FormatterType> nameMapping = new HashMap<String, FormatterType>();
 	private static final String nameString;
 
 	private final String xsl;
 	private final String ext;
+	private final AttributeProviderType ctype;
 
 	public String getXslFileName() {
 		return xsl;
@@ -79,17 +82,22 @@ public enum FormatterType {
 		return ext;
 	}
 
+	public AttributeProviderType getColorCodeType() {
+		return ctype;
+	}
+
 	public String getFriendlyName() {
 		return this.name().toLowerCase();
 	}
 
 	private FormatterType() {
-		this(null, null);
+		this(null, null, AttributeProviderType.TEXT);
 	}
 
-	private FormatterType(String xsl, String ext) {
+	private FormatterType(String xsl, String ext, AttributeProviderType ctype) {
 		this.xsl = xsl == null ? "text" : xsl;
 		this.ext = ext == null ? "txt" : ext;
+		this.ctype = ctype;
 	}
 
 	public static FormatterType getValueByName(String name) {

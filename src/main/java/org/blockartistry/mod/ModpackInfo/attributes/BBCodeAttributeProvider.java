@@ -23,7 +23,7 @@
  * THE SOFTWARE.
  */
 
-package org.blockartistry.mod.ModpackInfo.colorcode;
+package org.blockartistry.mod.ModpackInfo.attributes;
 
 import java.util.HashMap;
 
@@ -42,7 +42,7 @@ import net.minecraftforge.common.config.Configuration;
  *         being used to publish the information.
  *
  */
-public class BBCodeColorCodeProvider extends ColorCodeProvider {
+public class BBCodeAttributeProvider extends AttributeProvider {
 
 	private static final String CATEGORY_FORMATTING = "formatting.bbcode";
 
@@ -176,7 +176,7 @@ public class BBCodeColorCodeProvider extends ColorCodeProvider {
 	}
 
 	@Override
-	public void applyColorCodes(Transformer transformer) {
+	public void applyAttributeCodes(Transformer transformer) {
 
 		transformerHelper(transformer, TEXT_MODPACK, TEXT_NAME);
 		transformerHelper(transformer, TEXT_MODPACK, TEXT_VERSION);
