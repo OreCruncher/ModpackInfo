@@ -30,86 +30,110 @@ import java.util.HashMap;
 import org.blockartistry.mod.ModpackInfo.attributes.AttributeProviderType;
 
 /**
- * @author OreCruncher
  *
- *         Defines the various output file formats that are supported. For each
- *         value there are two properties that can be specified:
+ * Defines the various output file formats that are supported. For each value
+ * there are two properties that can be specified:
  * 
- *         xsl: the name of the translation sheet defined in resources that will
- *         be used to perform a transformation when writing information to the
- *         output log. Specifying null will default to "text".
+ * xsl: the name of the translation sheet defined in resources that will be used
+ * to perform a transformation when writing information to the output log.
+ * Specifying null will default to "text".
  * 
- *         ext: the filename extension that will be used when writing the output
- *         file to disk. Specifying null will default to "txt".
+ * ext: the filename extension that will be used when writing the output file to
+ * disk. Specifying null will default to "txt".
  *
  */
-public enum FormatterType {
+public enum OutputType {
 
-	/*
+	/**
 	 * TEXT causes the output to be generated in plain text
 	 */
-	TEXT("colored", "txt", AttributeProviderType.TEXT),
+	TEXT("decorated", "txt", AttributeProviderType.TEXT),
 
-	/*
+	/**
 	 * The output is generated with BBCode tags suitable for Internet forums
 	 * that support BBCode.
 	 */
-	BBCODE("colored", "txt", AttributeProviderType.BBCODE),
+	BBCODE("decorated", "txt", AttributeProviderType.BBCODE),
 
-	/*
+	/**
 	 * The output is generated as XML. It is assumed that some other post
 	 * process will pick up the file.
 	 */
 	XML("xml", "xml", AttributeProviderType.NONE),
 
-	/*
+	/**
 	 * The output is generated as JSON.
 	 */
 	JSON("json", "json", AttributeProviderType.NONE);
 
-	private static final HashMap<String, FormatterType> nameMapping = new HashMap<String, FormatterType>();
+	private static final HashMap<String, OutputType> nameMapping = new HashMap<String, OutputType>();
 	private static final String nameString;
 
 	private final String xsl;
 	private final String ext;
-	private final AttributeProviderType ctype;
+	private final AttributeProviderType attributeProvider;
 
+	/**
+	 * @return The name of the Xsl transform sheet to use when transforming for
+	 *         this output type.
+	 */
 	public String getXslFileName() {
 		return xsl;
 	}
 
+	/**
+	 * @return The filename extension to use when creating the output file on
+	 *         disk.
+	 */
 	public String getFileNameExtension() {
 		return ext;
 	}
 
-	public AttributeProviderType getColorCodeType() {
-		return ctype;
+	/**
+	 * @return The type of AttributeProvider to use when generating output for
+	 *         this type
+	 */
+	public AttributeProviderType getAttributeProviderType() {
+		return attributeProvider;
 	}
 
+	/**
+	 * @return The friendly name of the type
+	 */
 	public String getFriendlyName() {
 		return this.name().toLowerCase();
 	}
 
-	private FormatterType() {
+	private OutputType() {
 		this(null, null, AttributeProviderType.TEXT);
 	}
 
-	private FormatterType(String xsl, String ext, AttributeProviderType ctype) {
+	private OutputType(String xsl, String ext, AttributeProviderType ctype) {
 		this.xsl = xsl == null ? "text" : xsl;
 		this.ext = ext == null ? "txt" : ext;
-		this.ctype = ctype;
+		this.attributeProvider = ctype;
 	}
 
-	public static FormatterType getValueByName(String name) {
+	/**
+	 * Returns an OutputType based on the friendly name specified.
+	 * 
+	 * @param name
+	 *            Friendly name to convert to OutputType
+	 * @return OutputType that matches the friendly name
+	 */
+	public static OutputType getValueByName(String name) {
 		return name == null ? null : nameMapping.get(name.toLowerCase());
 	}
 
+	/**
+	 * @return Entire list of friendly names concatenated together.
+	 */
 	public static String getNameValueString() {
 		return nameString;
 	}
 
 	static {
-		for (FormatterType ft : values()) {
+		for (OutputType ft : values()) {
 			nameMapping.put(ft.getFriendlyName(), ft);
 		}
 		nameString = String.join("|", nameMapping.keySet());

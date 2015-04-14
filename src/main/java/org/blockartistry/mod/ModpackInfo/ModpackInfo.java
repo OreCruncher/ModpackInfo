@@ -27,16 +27,9 @@ package org.blockartistry.mod.ModpackInfo;
 
 import java.io.File;
 
-import javax.xml.transform.Source;
-import javax.xml.transform.Templates;
-import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerException;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
-import javax.xml.transform.stream.StreamSource;
 
-import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
@@ -50,18 +43,18 @@ import net.minecraftforge.common.config.Configuration;
 
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.Logger;
-import org.blockartistry.mod.ModpackInfo.Player.PlayerLoginEventHandler;
-import org.blockartistry.mod.ModpackInfo.Xml.XmlConverter;
+import org.blockartistry.mod.ModpackInfo.Player.PlayerEntityHelper;
+import org.blockartistry.mod.ModpackInfo.Xml.XmlHelpers;
 import org.blockartistry.mod.ModpackInfo.attributes.AttributeProvider;
 import org.blockartistry.mod.ModpackInfo.commands.CommandHelper;
 import org.w3c.dom.Document;
 
 /**
- * @author OreCruncher
  * 
- *         Main class of the mod. Handles the necessary "glue" into the Forge
- *         framework as well as performing the high level tasks of generating
- *         the modpack information to a log file on disk.
+ * Main class of the mod. Handles the necessary "glue" into the Forge framework
+ * as well as performing the high level tasks of generating the modpack
+ * information to a log file on disk.
+ * 
  */
 @Mod(modid = ModpackInfo.MOD_ID, useMetadata = true, dependencies = ModpackInfo.DEPENDENCIES, version = ModpackInfo.VERSION)
 public final class ModpackInfo {
@@ -69,10 +62,10 @@ public final class ModpackInfo {
 	@Instance
 	public static ModpackInfo instance = new ModpackInfo();
 
-	private static final String TEXT_OPTION_FORMATTER_TYPE = "FormatterType";
-	private static final String TEXT_OPTION_FORMATTER_TYPE_COMMENT = "Formatter to use when generating output file ("
-			+ FormatterType.getNameValueString() + ")";
-	private static final String DEFAULT_FORMATTER_TYPE = FormatterType.TEXT
+	private static final String TEXT_OPTION_OUTPUT_TYPE = "OutputType";
+	private static final String TEXT_OPTION_OUTPUT_TYPE_COMMENT = "Type of output to generate ("
+			+ OutputType.getNameValueString() + ")";
+	private static final String DEFAULT_OUTPUT_TYPE = OutputType.TEXT
 			.getFriendlyName();
 	private static final String TEXT_OPTION_DISPLAY_GREETING = "Display Greeting";
 	private static final String TEXT_OPTION_DISPLAY_GREETING_COMMENT = "Display greeting when player logs in (true|false)";
@@ -98,7 +91,7 @@ public final class ModpackInfo {
 		return info;
 	}
 
-	private FormatterType fType = FormatterType.TEXT;
+	private OutputType fType = OutputType.TEXT;
 	private boolean displayLoginGreeting = DEFAULT_DISPLAY_GREETING;
 	private boolean enableCommands = DEFAULT_ENABLE_COMMANDS;
 
@@ -119,23 +112,22 @@ public final class ModpackInfo {
 
 		try {
 
-			fType = FormatterType.getValueByName(config.get(
-					Configuration.CATEGORY_GENERAL, TEXT_OPTION_FORMATTER_TYPE,
-					DEFAULT_FORMATTER_TYPE, TEXT_OPTION_FORMATTER_TYPE_COMMENT)
+			fType = OutputType.getValueByName(config.get(
+					Configuration.CATEGORY_GENERAL, TEXT_OPTION_OUTPUT_TYPE,
+					DEFAULT_OUTPUT_TYPE, TEXT_OPTION_OUTPUT_TYPE_COMMENT)
 					.getString());
 
 			if (fType == null) {
 				log.warn(
-						"Unknown FormatterType in configuration; defaulting to '%s'",
-						DEFAULT_FORMATTER_TYPE);
-				fType = FormatterType.getValueByName(DEFAULT_FORMATTER_TYPE);
+						"Unknown OutputType in configuration; defaulting to '%s'",
+						DEFAULT_OUTPUT_TYPE);
+				fType = OutputType.getValueByName(DEFAULT_OUTPUT_TYPE);
 			}
 
 			info = new PackInfo();
-			cc = fType.getColorCodeType().getProvider();
-
 			PackInfo.init(config);
-			cc.init(config);
+
+			cc = fType.getAttributeProviderType().getProvider(config);
 
 			displayLoginGreeting = config.get(Configuration.CATEGORY_GENERAL,
 					TEXT_OPTION_DISPLAY_GREETING, DEFAULT_DISPLAY_GREETING,
@@ -148,7 +140,7 @@ public final class ModpackInfo {
 		} catch (Exception e) {
 			log.log(Level.WARN, "Unable to read config file!", e);
 			e.printStackTrace();
-			fType = FormatterType.TEXT;
+			fType = OutputType.TEXT;
 		}
 
 		config.save();
@@ -159,9 +151,9 @@ public final class ModpackInfo {
 
 		// Register our greeting handler if it is configured
 		if (displayLoginGreeting) {
+
 			log.info("Registering for player login events");
-			FMLCommonHandler.instance().bus()
-					.register(new PlayerLoginEventHandler());
+			PlayerEntityHelper.registerEventHandlers();
 		} else {
 			log.info("Not registering for player login events");
 		}
@@ -172,7 +164,7 @@ public final class ModpackInfo {
 
 		try {
 			// Get our modlist XML
-			Document doc = XmlConverter.toXml(info, Loader.instance()
+			Document doc = XmlHelpers.toXml(info, Loader.instance()
 					.getModList());
 
 			if (doc == null) {
@@ -181,21 +173,13 @@ public final class ModpackInfo {
 				return;
 			}
 
-			// Make our filename
+			// Make our output filename
 			String fileName = String.format("%s%s%s", FILE_NAME, ".",
 					fType.getFileNameExtension());
 
-			// Prep for transformation!
-			TransformerFactory factory = TransformerFactory.newInstance();
-			Templates template = factory.newTemplates(new StreamSource(Assets
-					.getTransformSheet(fType)));
-			Transformer xformer = template.newTransformer();
-			Source source = new DOMSource(doc);
-			StreamResult result = new StreamResult(new File(mcDir, fileName));
-
 			// Transform!
-			cc.applyAttributeCodes(xformer);
-			xformer.transform(source, result);
+			XmlHelpers.saveTo(doc, Assets.getTransformSheet(fType), cc,
+					new StreamResult(new File(mcDir, fileName)));
 
 		} catch (TransformerException e) {
 			log.log(Level.WARN,

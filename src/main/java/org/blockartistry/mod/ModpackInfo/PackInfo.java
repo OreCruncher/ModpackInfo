@@ -28,10 +28,9 @@ package org.blockartistry.mod.ModpackInfo;
 import net.minecraftforge.common.config.Configuration;
 
 /**
- * @author OreCruncher
  * 
- *         PackInfo will hold modpack description information obtained from the
- *         mod configuration file. This data is specified by the modpack author.
+ * PackInfo will hold modpack description information obtained from the mod
+ * configuration file. This data is specified by the modpack author.
  *
  */
 public class PackInfo {

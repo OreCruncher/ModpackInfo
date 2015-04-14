@@ -25,34 +25,71 @@
 
 package org.blockartistry.mod.ModpackInfo.attributes;
 
+import net.minecraftforge.common.config.Configuration;
+
 /**
- * @author OreCruncher
  *
- *         These are the possible attribute provider types that can be used to
- *         generate output log files. Typically attributes provide text coloring
- *         and visual adjustments, though the can be anything based upon the
- *         service where the log file is published.
+ * These are the possible attribute provider types that can be used to generate
+ * output log files. Typically attributes provide text coloring and visual
+ * adjustments, though the can be anything based upon the service where the log
+ * file is published.
  * 
  */
 public enum AttributeProviderType {
 
+	/**
+	 * No formatting attributes are applied during transformation
+	 */
 	NONE(NullAttributeProvider.class),
 
+	/**
+	 * Formatting attributes suitable for pure text are applied
+	 */
 	TEXT(NullAttributeProvider.class),
 
+	/**
+	 * Formatting attributes suitable for BBCode are applied
+	 */
 	BBCODE(BBCodeAttributeProvider.class);
 
-	private final Class<?> attributeProviderFactory;
+	private final Class<? extends AttributeProvider> attributeProviderFactory;
 
-	private AttributeProviderType(Class<?> factory) {
+	private AttributeProviderType(Class<? extends AttributeProvider> factory) {
 
 		this.attributeProviderFactory = factory;
 
 	}
 
+	/**
+	 * Returns an appropriate provider for the AttributeProviderType that has
+	 * been initialized from the Configuration instance provided.
+	 * 
+	 * @return Provider that contains formatting information from Configuration
+	 * @throws InstantiationException
+	 * @throws IllegalAccessException
+	 */
+	public AttributeProvider getProvider(Configuration config)
+			throws InstantiationException, IllegalAccessException {
+		AttributeProvider ap = attributeProviderFactory.newInstance();
+
+		if (config != null) {
+			ap.init(config);
+		}
+		return ap;
+	}
+
+	/**
+	 * Returns an appropriate provider for the AttributeProviderType. The
+	 * instance data will be default based on the implementation of the
+	 * provider.
+	 * 
+	 * @return Provider initialized to it's defaults
+	 * @throws InstantiationException
+	 * @throws IllegalAccessException
+	 */
 	public AttributeProvider getProvider() throws InstantiationException,
 			IllegalAccessException {
-		return (AttributeProvider) attributeProviderFactory.newInstance();
+		return getProvider(null);
 	}
 
 }

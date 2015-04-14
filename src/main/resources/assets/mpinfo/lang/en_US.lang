@@ -1,0 +1,6 @@
+mpinfo.greeting.text=§bYou are playing §6%s§r
+mpinfo.name.text=§6%s§r
+mpinfo.version.text=§e Version %s§r\n
+mpinfo.website.text=§9%s§r\n
+mpinfo.authors.text=§aModpack Authors: §e%s§r\n
+mpinfo.noinfo.text=§cNo information available§r

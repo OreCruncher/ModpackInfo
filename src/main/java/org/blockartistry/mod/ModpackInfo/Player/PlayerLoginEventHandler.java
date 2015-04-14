@@ -27,66 +27,53 @@ package org.blockartistry.mod.ModpackInfo.Player;
 
 import org.blockartistry.mod.ModpackInfo.ModpackInfo;
 import org.blockartistry.mod.ModpackInfo.PackInfo;
+import org.blockartistry.mod.ModpackInfo.PlayerContext;
+import org.blockartistry.mod.ModpackInfo.localization.LanguagePack;
 
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.util.EnumChatFormatting;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
 
 /**
- * @author OreCruncher
  * 
- *         Event handler for detecting player login. When detected the player
- *         will be sent a greeting that is derived from the modpack information
- *         provided by the modpack authors.
- * */
+ * Event handler for detecting player login. When detected the player will be
+ * sent a greeting that is derived from the modpack information provided by the
+ * modpack authors.
+ *
+ */
 public class PlayerLoginEventHandler {
 
-	/*
-	 * Message to display to the player when they log in. An initial login will
-	 * cause this message to be generated. Note that the message is split along
-	 * newlines and cached for performance and memory reasons.
-	 */
-	protected String[] loginMessage = null;
+	private String getLoginMessage(LanguagePack lang) {
 
-	private String[] getLoginMessage() {
+		StringBuilder builder = new StringBuilder();
+		PackInfo info = ModpackInfo.instance.getPackInfo();
 
-		if (loginMessage == null) {
-			StringBuilder builder = new StringBuilder();
-			PackInfo info = ModpackInfo.instance.getPackInfo();
+		if (info.hasValidName()) {
 
-			if (info.hasValidName()) {
-				builder.append(EnumChatFormatting.AQUA + "You are playing "
-						+ EnumChatFormatting.GOLD);
-				builder.append(info.getName());
+			builder.append(lang.translate("mpinfo.greeting.text",
+					info.getName()));
 
-				if (info.hasValidVersion()) {
-					builder.append(EnumChatFormatting.YELLOW + " Version ");
-					builder.append(info.getVersion());
-				}
-
-				if (info.hasValidWebsite()) {
-					builder.append("\n" + EnumChatFormatting.BLUE
-							+ info.getWebsite());
-				}
+			if (info.hasValidVersion()) {
+				builder.append(lang.translate("mpinfo.version.text",
+						info.getVersion()));
 			}
 
-			loginMessage = builder.toString().split("\\r?\\n");
+			if (info.hasValidWebsite()) {
+				builder.append(lang.translate("mpinfo.website.text",
+						info.getWebsite()));
+			}
 		}
 
-		return loginMessage;
+		return builder.toString();
 	}
 
 	@SubscribeEvent
 	public void onPlayerLogin(PlayerLoggedInEvent event) {
 
-		if (event.player != null) {
-
-			EntityPlayerMP player = (EntityPlayerMP) event.player;
-
-			if (player != null) {
-				PlayerEntityHelper.sendChatMessage(player, getLoginMessage());
-			}
+		if (event.player instanceof EntityPlayerMP) {
+			PlayerContext ctx = new PlayerContext(event.player);
+			PlayerEntityHelper.sendChatMessage(ctx,
+					getLoginMessage(ctx.getLanguagePack()));
 		}
 	}
 }

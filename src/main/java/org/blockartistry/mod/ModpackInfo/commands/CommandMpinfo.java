@@ -30,56 +30,49 @@ import java.util.List;
 
 import org.blockartistry.mod.ModpackInfo.ModpackInfo;
 import org.blockartistry.mod.ModpackInfo.PackInfo;
+import org.blockartistry.mod.ModpackInfo.PlayerContext;
 import org.blockartistry.mod.ModpackInfo.Player.PlayerEntityHelper;
+import org.blockartistry.mod.ModpackInfo.localization.LanguagePack;
 
 import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
-import net.minecraft.util.EnumChatFormatting;
 
 /**
- * @author OreCruncher
  * 
- *         Implementation of the /mpinfo command.
+ * Implementation of the /mpinfo command.
  *
  */
 public class CommandMpinfo implements ICommand {
 
-	private String[] mpinfoMessage = null;
+	private String getMpinfoMessage(LanguagePack lang) {
 
-	private String[] getMpinfoMessage() {
+		StringBuilder builder = new StringBuilder();
+		PackInfo info = ModpackInfo.instance.getPackInfo();
 
-		if (mpinfoMessage == null) {
-			StringBuilder builder = new StringBuilder();
-			PackInfo info = ModpackInfo.instance.getPackInfo();
+		if (info.hasValidName()) {
 
-			if (info.hasValidName()) {
-				builder.append(EnumChatFormatting.GOLD + info.getName());
+			builder.append(lang.translate("mpinfo.name.text", info.getName()));
 
-				if (info.hasValidVersion()) {
-					builder.append(" Version ");
-					builder.append(info.getVersion());
-				}
-
-				if (info.hasValidWebsite()) {
-					builder.append("\n" + EnumChatFormatting.BLUE
-							+ info.getWebsite());
-				}
-
-				if (info.hasValidAuthors()) {
-					builder.append("\n" + EnumChatFormatting.GREEN
-							+ "Modpack Authors: " + EnumChatFormatting.YELLOW
-							+ info.getAuthors());
-				}
-
-			} else {
-				builder.append(EnumChatFormatting.RED
-						+ "Modpack information unavailable");
+			if (info.hasValidVersion()) {
+				builder.append(lang.translate("mpinfo.version.text",
+						info.getVersion()));
 			}
 
-			mpinfoMessage = builder.toString().split("\\r?\\n");
+			if (info.hasValidWebsite()) {
+				builder.append(lang.translate("mpinfo.website.text",
+						info.getWebsite()));
+			}
+
+			if (info.hasValidAuthors()) {
+				builder.append(lang.translate("mpinfo.authors.text",
+						info.getAuthors()));
+			}
+
+		} else {
+			builder.append(lang.translate("mpinfo.noinfo.text"));
 		}
 
-		return mpinfoMessage;
+		return builder.toString();
 	}
 
 	private static List<String> aliases = new ArrayList<String>();
@@ -108,8 +101,9 @@ public class CommandMpinfo implements ICommand {
 	@Override
 	public void processCommand(ICommandSender sender, String[] parms) {
 
-		PlayerEntityHelper.sendChatMessage(sender, getMpinfoMessage());
-
+		PlayerContext ctx = new PlayerContext(sender);
+		PlayerEntityHelper.sendChatMessage(ctx,
+				getMpinfoMessage(ctx.getLanguagePack()));
 	}
 
 	@Override
@@ -133,5 +127,4 @@ public class CommandMpinfo implements ICommand {
 		aliases.add("mpinfo");
 		aliases.add("modpackinfo");
 	}
-
 }

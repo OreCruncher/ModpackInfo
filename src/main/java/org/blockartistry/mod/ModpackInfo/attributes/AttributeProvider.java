@@ -30,9 +30,8 @@ import javax.xml.transform.Transformer;
 import net.minecraftforge.common.config.Configuration;
 
 /**
- * @author OreCruncher
  *
- *         This abstract class defines the base of any AttributeProvider.
+ * This abstract class defines the base of any AttributeProvider.
  *
  */
 public abstract class AttributeProvider {
@@ -62,14 +61,18 @@ public abstract class AttributeProvider {
 	 * Initializes an AttributeProvider based on the content of the
 	 * configuration file.
 	 * 
-	 * @param config Reference to the configuration object containing parameter information
+	 * @param config
+	 *            Reference to the configuration object containing parameter
+	 *            information
 	 */
 	public abstract void init(Configuration config);
 
 	/**
-	 * Called by the generation logic to apply attributes to the provider Transformer.
+	 * Called by the generation logic to apply attributes to the provider
+	 * Transformer.
 	 * 
-	 * @param transformer Transformer to receive the attribute information.
+	 * @param transformer
+	 *            Transformer to receive the attribute information.
 	 */
 	public abstract void applyAttributeCodes(Transformer transformer);
 }

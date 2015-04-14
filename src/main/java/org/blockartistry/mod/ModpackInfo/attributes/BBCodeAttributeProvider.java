@@ -32,14 +32,12 @@ import javax.xml.transform.Transformer;
 import net.minecraftforge.common.config.Configuration;
 
 /**
- * @author OreCruncher
  * 
- *         An instance of this class will provide color decoration to the
- *         generated output file. By default it provides attributes based on
- *         Enjin's BBCode standard. The attributes can be customized by
- *         modifying the configuration file for the mod. Strictly speaking, the
- *         codes do not have to be BBCode - they can match whatever platform is
- *         being used to publish the information.
+ * An instance of this class will provide color decoration to the generated
+ * output file. By default it provides attributes based on Enjin's BBCode
+ * standard. The attributes can be customized by modifying the configuration
+ * file for the mod. Strictly speaking, the codes do not have to be BBCode -
+ * they can match whatever platform is being used to publish the information.
  *
  */
 public class BBCodeAttributeProvider extends AttributeProvider {

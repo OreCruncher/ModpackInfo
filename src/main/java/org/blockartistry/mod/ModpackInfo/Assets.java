@@ -28,17 +28,26 @@ package org.blockartistry.mod.ModpackInfo;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.Locale;
+
 import net.minecraft.launchwrapper.Launch;
 
 /**
- * @author OreCruncher
  * 
- *         A set of helper methods that facilitates access to resource
- *         information used by the mod. It handles the differences of accessing
- *         resources between the development environment and the jar file.
+ * A set of helper methods that facilitates access to resource information used
+ * by the mod. It handles the differences of accessing resources between the
+ * development environment and the jar file.
  *
  */
 public class Assets {
+
+	private static final String PATH_SEP = "/";
+	private static final String ASSET_ROOT = "/assets";
+	private static final String ASSET_ROOT_DEV = "/";
+	private static final String SHEET_RESOURCE_PATH = "xlatesheets";
+	private static final String SHEET_RESOURCE_EXTENSION = ".xsl";
+	private static final String LANG_RESOURCE_PATH = "lang";
+	private static final String LANG_RESOURCE_EXTENSION = ".lang";
 
 	private static final boolean developmentEnvironment = (Boolean) Launch.blackboard
 			.get("fml.deobfuscatedEnvironment");
@@ -55,12 +64,12 @@ public class Assets {
 			if (f != null && !f.isEmpty()) {
 				if (sawOne)
 					if (!endInSlash)
-						builder.append("/");
+						builder.append(PATH_SEP);
 
 				sawOne = true;
 
 				builder.append(f);
-				endInSlash = f.endsWith("/");
+				endInSlash = f.endsWith(PATH_SEP);
 			}
 		}
 
@@ -88,9 +97,9 @@ public class Assets {
 
 		if (assetPath == null) {
 			if (developmentEnvironment)
-				assetPath = "/";
+				assetPath = ASSET_ROOT_DEV;
 			else
-				assetPath = combine("/assets", ModpackInfo.MOD_ID);
+				assetPath = combine(ASSET_ROOT, ModpackInfo.MOD_ID);
 		}
 		return assetPath;
 	}
@@ -119,10 +128,10 @@ public class Assets {
 	 *            Formatter that is of interest
 	 * @return BufferedReader for the associated Xsl
 	 */
-	public static BufferedReader getTransformSheet(FormatterType formatter) {
+	public static BufferedReader getTransformSheet(OutputType formatter) {
 
-		String assetPath = getAssetPath("xlatesheets",
-				formatter.getXslFileName() + ".xsl");
+		String assetPath = getAssetPath(SHEET_RESOURCE_PATH,
+				formatter.getXslFileName() + SHEET_RESOURCE_EXTENSION);
 
 		InputStream in = ModpackInfo.instance.getClass().getResourceAsStream(
 				assetPath);
@@ -131,5 +140,16 @@ public class Assets {
 			return null;
 
 		return new BufferedReader(new InputStreamReader(in));
+	}
+
+	public static InputStream getLanguageFile(Locale locale) {
+
+		String assetPath = getAssetPath(LANG_RESOURCE_PATH, locale.toString()
+				+ LANG_RESOURCE_EXTENSION);
+
+		InputStream in = ModpackInfo.instance.getClass().getResourceAsStream(
+				assetPath);
+
+		return in;
 	}
 }

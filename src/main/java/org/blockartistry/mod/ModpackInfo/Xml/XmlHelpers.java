@@ -25,12 +25,22 @@
 
 package org.blockartistry.mod.ModpackInfo.Xml;
 
+import java.io.Reader;
 import java.util.List;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.Result;
+import javax.xml.transform.Source;
+import javax.xml.transform.Templates;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamSource;
 
 import org.blockartistry.mod.ModpackInfo.PackInfo;
+import org.blockartistry.mod.ModpackInfo.attributes.AttributeProvider;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Text;
@@ -38,8 +48,24 @@ import org.w3c.dom.Text;
 import cpw.mods.fml.common.ModContainer;
 import cpw.mods.fml.common.ModMetadata;
 
-public class XmlConverter {
+/**
+ * 
+ * Set of helper methods to assist in handling the internal Xml document
+ * containing information about the modpack.
+ *
+ */
+public class XmlHelpers {
 
+	/**
+	 * Traverses Forge mod information collecting the data into an Xml Document
+	 * structure.
+	 * 
+	 * @param info
+	 *            Information about the modpack to fold into the document
+	 * @param mods
+	 *            List of mods to include in the output
+	 * @return An Xml document suitable for further processing
+	 */
 	public static Document toXml(PackInfo info, List<ModContainer> mods) {
 
 		Document doc = null;
@@ -75,6 +101,34 @@ public class XmlConverter {
 
 		return doc;
 
+	}
+
+	/**
+	 * Saves and Xml document to the specified output, performing the necessary
+	 * translation along the way.
+	 * 
+	 * @param doc
+	 *            Xml document to transform
+	 * @param xsl
+	 *            Xsl sheet that describes the transformation
+	 * @param provider
+	 *            AttributeProvider that is used to decorate the output with
+	 *            format attributes
+	 * @param output
+	 *            Result target of the transformation
+	 * @throws TransformerException
+	 */
+	public static void saveTo(Document doc, Reader xsl,
+			AttributeProvider provider, Result output)
+			throws TransformerException {
+		TransformerFactory factory = TransformerFactory.newInstance();
+		Templates template = factory.newTemplates(new StreamSource(xsl));
+		Transformer xformer = template.newTransformer();
+		Source source = new DOMSource(doc);
+
+		// Transform!
+		provider.applyAttributeCodes(xformer);
+		xformer.transform(source, output);
 	}
 
 	protected static String getOSVersionString() {

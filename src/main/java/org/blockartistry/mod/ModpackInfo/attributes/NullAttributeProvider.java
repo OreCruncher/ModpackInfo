@@ -30,10 +30,9 @@ import javax.xml.transform.Transformer;
 import net.minecraftforge.common.config.Configuration;
 
 /**
- * @author OreCruncher
  * 
- *         This AttributeProvider doesn't do anything. It is used for output
- *         types such as text, Xml, and json.
+ * This AttributeProvider doesn't do anything. It is used for output types such
+ * as text, Xml, and json.
  *
  */
 public class NullAttributeProvider extends AttributeProvider {

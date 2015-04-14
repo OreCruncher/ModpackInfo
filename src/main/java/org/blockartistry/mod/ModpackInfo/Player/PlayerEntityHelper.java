@@ -25,13 +25,14 @@
 
 package org.blockartistry.mod.ModpackInfo.Player;
 
+import cpw.mods.fml.common.FMLCommonHandler;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.util.ChatComponentText;
 
 /**
- * @author OreCruncher
  *
- *         Helper methods that facilitate access to the Forge player entity.
+ * Helper methods that facilitate access to the Forge player entity.
+ * 
  */
 public class PlayerEntityHelper {
 
@@ -45,7 +46,7 @@ public class PlayerEntityHelper {
 	 *            The messages to send.
 	 */
 	public static void sendChatMessage(ICommandSender player, String[] lines) {
-		if (lines == null || lines.length == 0)
+		if (player == null || lines == null || lines.length == 0)
 			return;
 
 		for (String m : lines) {
@@ -64,9 +65,18 @@ public class PlayerEntityHelper {
 	 */
 	public static void sendChatMessage(ICommandSender player, String message) {
 
-		if (message == null || message.isEmpty())
+		if (player == null || message == null || message.isEmpty())
 			return;
 
 		sendChatMessage(player, message.split("\\r?\\n"));
+	}
+
+	/**
+	 * Registers Forge/FML event handlers for the Player entity
+	 */
+	public static void registerEventHandlers() {
+
+		FMLCommonHandler.instance().bus()
+				.register(new PlayerLoginEventHandler());
 	}
 }

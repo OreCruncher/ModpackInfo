@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:codes="xalan://org.blockartistry.mod.ModpackInfo.BBCodeColorInfo">
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
   <xsl:output method="text" indent="yes"/>
   <xsl:param name="modpack.name.begin"/>
   <xsl:param name="modpack.name.end"/>
