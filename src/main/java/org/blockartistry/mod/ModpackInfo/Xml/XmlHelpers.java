@@ -31,7 +31,6 @@ import java.util.List;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.Result;
-import javax.xml.transform.Source;
 import javax.xml.transform.Templates;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerException;
@@ -45,6 +44,8 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Text;
 
+import com.google.common.base.Preconditions;
+
 import cpw.mods.fml.common.ModContainer;
 import cpw.mods.fml.common.ModMetadata;
 
@@ -54,7 +55,7 @@ import cpw.mods.fml.common.ModMetadata;
  * containing information about the modpack.
  *
  */
-public class XmlHelpers {
+public final class XmlHelpers {
 
 	/**
 	 * Traverses Forge mod information collecting the data into an Xml Document
@@ -88,8 +89,10 @@ public class XmlHelpers {
 			root.appendChild(modList);
 
 			// Traverse the mod list adding information to the document
-			for (ModContainer mod : mods)
-				addModInfo(doc, modList, mod);
+			if (mods != null) {
+				for (ModContainer mod : mods)
+					addModInfo(doc, modList, mod);
+			}
 
 			// Add environment information
 			addEnvironmentInfo(doc, root);
@@ -121,14 +124,19 @@ public class XmlHelpers {
 	public static void saveTo(Document doc, Reader xsl,
 			AttributeProvider provider, Result output)
 			throws TransformerException {
+
+		Preconditions.checkNotNull(doc);
+		Preconditions.checkNotNull(xsl);
+		Preconditions.checkNotNull(provider);
+		Preconditions.checkNotNull(output);
+
 		TransformerFactory factory = TransformerFactory.newInstance();
 		Templates template = factory.newTemplates(new StreamSource(xsl));
 		Transformer xformer = template.newTransformer();
-		Source source = new DOMSource(doc);
 
 		// Transform!
 		provider.applyAttributeCodes(xformer);
-		xformer.transform(source, output);
+		xformer.transform(new DOMSource(doc), output);
 	}
 
 	protected static String getOSVersionString() {
@@ -156,23 +164,25 @@ public class XmlHelpers {
 
 		Element pack = doc.createElement("Pack");
 
-		if (info.hasValidName())
-			addProperty(doc, pack, "name", info.getName());
+		if (info != null) {
+			if (info.hasValidName())
+				addProperty(doc, pack, "name", info.getName());
 
-		if (info.hasValidVersion())
-			addProperty(doc, pack, "version", info.getVersion());
+			if (info.hasValidVersion())
+				addProperty(doc, pack, "version", info.getVersion());
 
-		if (info.hasValidDescription())
-			addProperty(doc, pack, "description", info.getDescription());
+			if (info.hasValidDescription())
+				addProperty(doc, pack, "description", info.getDescription());
 
-		if (info.hasValidCredits())
-			addProperty(doc, pack, "credits", info.getCredits());
+			if (info.hasValidCredits())
+				addProperty(doc, pack, "credits", info.getCredits());
 
-		if (info.hasValidAuthors())
-			addProperty(doc, pack, "authors", info.getAuthors());
+			if (info.hasValidAuthors())
+				addProperty(doc, pack, "authors", info.getAuthors());
 
-		if (info.hasValidWebsite())
-			addProperty(doc, pack, "website", info.getWebsite());
+			if (info.hasValidWebsite())
+				addProperty(doc, pack, "website", info.getWebsite());
+		}
 
 		parent.appendChild(pack);
 	}

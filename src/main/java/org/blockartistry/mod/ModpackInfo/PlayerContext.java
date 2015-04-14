@@ -26,34 +26,43 @@
 package org.blockartistry.mod.ModpackInfo;
 
 import java.lang.reflect.Field;
-import java.util.Locale;
 
 import net.minecraft.command.ICommandSender;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.util.IChatComponent;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.FakePlayer;
 
 import org.blockartistry.mod.ModpackInfo.localization.LanguagePack;
+
+import com.google.common.base.Preconditions;
 
 /**
  * Brings data from several sources together into one entity for ease of use
  * when processing commands.
  *
  */
-public class PlayerContext implements ICommandSender {
+/**
+ * @author OreCruncher
+ *
+ */
+public final class PlayerContext implements ICommandSender {
 
 	// Hook or by crook we will get the locale string for the remote client
 	private static Field epField;
 	static {
 		try {
 			// Need to use the right field name...
-			if(Assets.runningAsDevelopment())
+			if (Assets.runningAsDevelopment())
 				epField = EntityPlayerMP.class.getDeclaredField("translator");
 			else
-				epField = EntityPlayerMP.class.getDeclaredField("field_71148_cg");
+				epField = EntityPlayerMP.class
+						.getDeclaredField("field_71148_cg");
 			epField.setAccessible(true);
 		} catch (NoSuchFieldException e) {
+			epField = null;
 			e.printStackTrace();
 		}
 	}
@@ -63,10 +72,13 @@ public class PlayerContext implements ICommandSender {
 	protected LanguagePack language;
 
 	public PlayerContext(ICommandSender sender) {
+
+		Preconditions.checkNotNull(sender);
+
 		this.sender = sender;
 
-		if (sender instanceof EntityPlayerMP && epField != null) {
-			EntityPlayerMP ep = (EntityPlayerMP) sender;
+		if (senderIs(EntityPlayerMP.class) && epField != null) {
+			EntityPlayerMP ep = senderAs(EntityPlayerMP.class);
 			try {
 				localeString = epField.get(ep).toString();
 			} catch (IllegalArgumentException e) {
@@ -83,6 +95,40 @@ public class PlayerContext implements ICommandSender {
 		}
 
 		language = LanguagePack.getLanguagePack(localeString);
+	}
+
+	/**
+	 * Checks the sender wrapped by PlayerContext and indicates if it is of the
+	 * requested type.
+	 * 
+	 * @param clazz
+	 *            The class type that is being checked against the sender
+	 * @return true if the sender is of that type; false otherwise
+	 */
+	public boolean senderIs(Class<? extends EntityPlayer> clazz) {
+
+		Preconditions.checkNotNull(clazz);
+		return clazz.isInstance(sender);
+	}
+
+	/**
+	 * Casts the wrapped sender and returns it as the requested type.
+	 * 
+	 * @param clazz
+	 *            The class type to cast the sender to
+	 * @return A reference to the applicable type
+	 */
+	public <T> T senderAs(Class<T> clazz) {
+
+		Preconditions.checkNotNull(clazz);
+		return clazz.cast(sender);
+	}
+
+	/**
+	 * @return true if the sender is a FakePlayer; false otherwise
+	 */
+	public boolean senderIsFakePlayer() {
+		return senderIs(FakePlayer.class);
 	}
 
 	/**
@@ -121,5 +167,4 @@ public class PlayerContext implements ICommandSender {
 	public World getEntityWorld() {
 		return sender.getEntityWorld();
 	}
-
 }

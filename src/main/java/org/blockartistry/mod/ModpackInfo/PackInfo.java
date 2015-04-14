@@ -27,13 +27,15 @@ package org.blockartistry.mod.ModpackInfo;
 
 import net.minecraftforge.common.config.Configuration;
 
+import com.google.common.base.Preconditions;
+
 /**
  * 
  * PackInfo will hold modpack description information obtained from the mod
  * configuration file. This data is specified by the modpack author.
  *
  */
-public class PackInfo {
+public final class PackInfo {
 
 	private static final String CATEGORY_MODPACK_INFO = "modpackinfo";
 
@@ -138,6 +140,8 @@ public class PackInfo {
 	 * @param config
 	 */
 	public static void init(Configuration config) {
+
+		Preconditions.checkNotNull(config);
 
 		modpackName = (config.get(CATEGORY_MODPACK_INFO, "name", "",
 				"Name of the modpack").getString());

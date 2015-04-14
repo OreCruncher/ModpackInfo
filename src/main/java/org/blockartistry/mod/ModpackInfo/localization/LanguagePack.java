@@ -36,6 +36,7 @@ import org.apache.commons.io.Charsets;
 import org.apache.commons.io.IOUtils;
 import org.blockartistry.mod.ModpackInfo.Assets;
 
+import com.google.common.base.Preconditions;
 import com.google.common.base.Splitter;
 
 /**
@@ -49,7 +50,7 @@ import com.google.common.base.Splitter;
  * codes. See en_US.lang for examples.
  *
  */
-public class LanguagePack {
+public final class LanguagePack {
 
 	public static final Locale LANGUAGE_PACK_DEFAULT = Locale.US;
 	private static final Splitter equalSignSplitter = Splitter.on('=').limit(2);
@@ -73,6 +74,8 @@ public class LanguagePack {
 	 * @return LanguagePack for the specified locale
 	 */
 	public static LanguagePack getLanguagePack(Locale locale) {
+
+		Preconditions.checkNotNull(locale);
 
 		String langToGet = locale.toString();
 
@@ -108,6 +111,8 @@ public class LanguagePack {
 	 */
 	public static LanguagePack getLanguagePack(String localeString) {
 
+		Preconditions.checkNotNull(localeString);
+
 		String[] tokens = localeString.split("_");
 		return getLanguagePack(new Locale(tokens[0], tokens[1]));
 	}
@@ -142,6 +147,9 @@ public class LanguagePack {
 	public static String translate(Locale locale, String formatId,
 			Object... parms) {
 
+		Preconditions.checkNotNull(locale);
+		Preconditions.checkNotNull(formatId);
+
 		return getLanguagePack(locale).translate(formatId, parms);
 	}
 
@@ -156,6 +164,8 @@ public class LanguagePack {
 	 * @return A string matching the request if found, or the format ID if not
 	 */
 	public String translate(String formatId, Object... parms) {
+
+		Preconditions.checkNotNull(formatId);
 
 		String s = translations.getOrDefault(formatId, formatId);
 		return (new MessageFormat(s, locale)).format(parms);
@@ -186,7 +196,7 @@ public class LanguagePack {
 		} catch (Exception ioexception) {
 			ioexception.printStackTrace();
 		}
-		
+
 		return table;
 	}
 
@@ -196,10 +206,10 @@ public class LanguagePack {
 
 		if (is == null)
 			return false;
-			
+
 		HashMap<String, String> strings = parseLangFile(is);
 		packs.put(locale.toString(), new LanguagePack(strings, locale));
-		
+
 		is = null;
 		return true;
 	}

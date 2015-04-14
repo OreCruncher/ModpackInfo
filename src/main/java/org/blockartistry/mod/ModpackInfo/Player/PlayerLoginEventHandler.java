@@ -25,13 +25,13 @@
 
 package org.blockartistry.mod.ModpackInfo.Player;
 
-import net.minecraft.entity.player.EntityPlayerMP;
-
 import org.blockartistry.mod.ModpackInfo.ModpackInfo;
 import org.blockartistry.mod.ModpackInfo.PackInfo;
 import org.blockartistry.mod.ModpackInfo.PlayerContext;
 import org.blockartistry.mod.ModpackInfo.localization.LanguagePack;
 import org.blockartistry.mod.ModpackInfo.localization.TextBuilder;
+
+import com.google.common.base.Preconditions;
 
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
@@ -43,7 +43,7 @@ import cpw.mods.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
  * modpack authors.
  *
  */
-public class PlayerLoginEventHandler {
+public final class PlayerLoginEventHandler {
 
 	private String getLoginMessage(LanguagePack lang) {
 
@@ -69,8 +69,12 @@ public class PlayerLoginEventHandler {
 	@SubscribeEvent
 	public void onPlayerLogin(PlayerLoggedInEvent event) {
 
-		if (event.player instanceof EntityPlayerMP) {
-			PlayerContext ctx = new PlayerContext(event.player);
+		Preconditions.checkNotNull(event);
+		Preconditions.checkNotNull(event.player);
+
+		PlayerContext ctx = new PlayerContext(event.player);
+
+		if (!ctx.senderIsFakePlayer()) {
 			PlayerEntityHelper.sendChatMessage(ctx,
 					getLoginMessage(ctx.getLanguagePack()));
 		}

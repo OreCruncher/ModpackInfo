@@ -61,9 +61,9 @@ import cpw.mods.fml.common.event.FMLServerStoppingEvent;
 public final class ModpackInfo {
 
 	@Instance
-	public static ModpackInfo instance = new ModpackInfo();
+	public static final ModpackInfo instance = new ModpackInfo();
 
-	private static final String TEXT_OPTION_OUTPUT_TYPE = "OutputType";
+	private static final String TEXT_OPTION_OUTPUT_TYPE = "Output Type";
 	private static final String TEXT_OPTION_OUTPUT_TYPE_COMMENT = "Type of output to generate ("
 			+ OutputType.getNameValueString() + ")";
 	private static final String DEFAULT_OUTPUT_TYPE = OutputType.TEXT
@@ -88,13 +88,16 @@ public final class ModpackInfo {
 	protected PackInfo info;
 	protected AttributeProvider cc;
 
-	public PackInfo getPackInfo() {
-		return info;
-	}
-
 	private OutputType fType = OutputType.TEXT;
 	private boolean displayLoginGreeting = DEFAULT_DISPLAY_GREETING;
 	private boolean enableCommands = DEFAULT_ENABLE_COMMANDS;
+
+	/**
+	 * @return Information about the modpack as indicated in the config file.
+	 */
+	public PackInfo getPackInfo() {
+		return info;
+	}
 
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event) {

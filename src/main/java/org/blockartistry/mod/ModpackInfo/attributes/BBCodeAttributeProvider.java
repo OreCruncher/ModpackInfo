@@ -31,6 +31,8 @@ import javax.xml.transform.Transformer;
 
 import net.minecraftforge.common.config.Configuration;
 
+import com.google.common.base.Preconditions;
+
 /**
  * 
  * An instance of this class will provide color decoration to the generated
@@ -82,6 +84,8 @@ public class BBCodeAttributeProvider extends AttributeProvider {
 
 	@Override
 	public void init(Configuration config) {
+
+		Preconditions.checkNotNull(config);
 
 		configHelper(config, getKey(TEXT_MODPACK, TEXT_NAME, TEXT_BEGIN),
 				DEFAULT_MODPACK_NAME_BEGIN_FORMAT);
@@ -153,21 +157,21 @@ public class BBCodeAttributeProvider extends AttributeProvider {
 				DEFAULT_MOD_CREDITS_END_FORMAT);
 	}
 
-	public static void configHelper(Configuration config, String key,
+	protected static void configHelper(Configuration config, String key,
 			String defValue) {
 
 		String val = config.get(CATEGORY_FORMATTING, key, defValue).getString();
 		codes.put(key, val);
 	}
 
-	public void transformerHelper(Transformer transformer, String category,
+	protected void transformerHelper(Transformer transformer, String category,
 			String field, String orientation) {
 
 		String key = getKey(category, field, orientation);
 		transformer.setParameter(key, codes.getOrDefault(key, TEXT_DEFAULT));
 	}
 
-	public void transformerHelper(Transformer transformer, String category,
+	protected void transformerHelper(Transformer transformer, String category,
 			String field) {
 		transformerHelper(transformer, category, field, TEXT_BEGIN);
 		transformerHelper(transformer, category, field, TEXT_END);
@@ -175,6 +179,8 @@ public class BBCodeAttributeProvider extends AttributeProvider {
 
 	@Override
 	public void applyAttributeCodes(Transformer transformer) {
+
+		Preconditions.checkNotNull(transformer);
 
 		transformerHelper(transformer, TEXT_MODPACK, TEXT_NAME);
 		transformerHelper(transformer, TEXT_MODPACK, TEXT_VERSION);

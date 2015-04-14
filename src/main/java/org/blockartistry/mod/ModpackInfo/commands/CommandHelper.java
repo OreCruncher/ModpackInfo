@@ -33,7 +33,7 @@ import cpw.mods.fml.common.event.FMLServerStartingEvent;
  * environment.
  *
  */
-public class CommandHelper {
+public final class CommandHelper {
 
 	/**
 	 * Registers command event handlers with Forge.

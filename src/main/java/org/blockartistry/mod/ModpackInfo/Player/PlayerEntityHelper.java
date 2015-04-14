@@ -34,7 +34,7 @@ import cpw.mods.fml.common.FMLCommonHandler;
  * Helper methods that facilitate access to the Forge player entity.
  * 
  */
-public class PlayerEntityHelper {
+public final class PlayerEntityHelper {
 
 	/**
 	 * Sends one or more messages to the specified player. It is assumed that

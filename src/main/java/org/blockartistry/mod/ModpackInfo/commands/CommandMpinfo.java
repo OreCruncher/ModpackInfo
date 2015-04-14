@@ -106,7 +106,8 @@ public class CommandMpinfo implements ICommand {
 
 	@Override
 	public boolean canCommandSenderUseCommand(ICommandSender sender) {
-		return true;
+		PlayerContext ctx = new PlayerContext(sender);
+		return !ctx.senderIsFakePlayer();
 	}
 
 	@SuppressWarnings("rawtypes")

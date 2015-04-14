@@ -2,5 +2,5 @@ mpinfo.greeting.text=§bYou are playing §6{0}§r\n
 mpinfo.name.text=§eModpack: §6{0}§r\n
 mpinfo.version.text=§eVersion: §6{0}§r\n
 mpinfo.website.text=§eSite: §6{0}§r\n
-mpinfo.authors.text=§eAuthors: §6{0}§r\n
+mpinfo.authors.text=§ePack Authors: §6{0}§r\n
 mpinfo.noinfo.text=§cNo information available§r\n

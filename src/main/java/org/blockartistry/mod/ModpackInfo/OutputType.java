@@ -29,6 +29,8 @@ import java.util.HashMap;
 
 import org.blockartistry.mod.ModpackInfo.attributes.AttributeProviderType;
 
+import com.google.common.base.Preconditions;
+
 /**
  *
  * Defines the various output file formats that are supported. For each value
@@ -109,6 +111,8 @@ public enum OutputType {
 	}
 
 	private OutputType(String xsl, String ext, AttributeProviderType ctype) {
+		Preconditions.checkNotNull(ctype);
+
 		this.xsl = xsl == null ? "text" : xsl;
 		this.ext = ext == null ? "txt" : ext;
 		this.attributeProvider = ctype;

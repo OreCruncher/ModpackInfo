@@ -31,6 +31,8 @@ import java.io.InputStreamReader;
 
 import net.minecraft.launchwrapper.Launch;
 
+import com.google.common.base.Preconditions;
+
 /**
  * 
  * A set of helper methods that facilitates access to resource information used
@@ -38,7 +40,7 @@ import net.minecraft.launchwrapper.Launch;
  * development environment and the jar file.
  *
  */
-public class Assets {
+public final class Assets {
 
 	private static final String PATH_SEP = "/";
 	private static final String ASSET_ROOT = "/assets";
@@ -54,6 +56,11 @@ public class Assets {
 	private static String assetPath = null;
 
 	protected static String combine(String... frags) {
+
+		if (frags.length == 1) {
+			return frags[0];
+		}
+
 		StringBuilder builder = new StringBuilder();
 		boolean sawOne = false;
 		boolean endInSlash = false;
@@ -114,6 +121,9 @@ public class Assets {
 	 * @return A fully specified path to the asset from the asset root
 	 */
 	public static String getAssetPath(String assetFolder, String asset) {
+		Preconditions.checkNotNull(assetFolder);
+		Preconditions.checkNotNull(asset);
+
 		if (runningAsDevelopment())
 			return combine(getAssetsRootPath(), asset);
 		return combine(getAssetsRootPath(), assetFolder, asset);
@@ -128,6 +138,7 @@ public class Assets {
 	 * @return BufferedReader for the associated Xsl
 	 */
 	public static BufferedReader getTransformSheet(OutputType formatter) {
+		Preconditions.checkNotNull(formatter);
 
 		String assetPath = getAssetPath(SHEET_RESOURCE_PATH,
 				formatter.getXslFileName() + SHEET_RESOURCE_EXTENSION);
@@ -142,6 +153,7 @@ public class Assets {
 	}
 
 	public static InputStream getLanguageFile(String locale) {
+		Preconditions.checkNotNull(locale);
 
 		String assetPath = getAssetPath(LANG_RESOURCE_PATH, locale
 				+ LANG_RESOURCE_EXTENSION);

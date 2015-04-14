@@ -25,12 +25,14 @@
 
 package org.blockartistry.mod.ModpackInfo.localization;
 
+import com.google.common.base.Preconditions;
+
 /**
  * TextBuilder is a helper class that makes it easy to generate strings based on
  * localized resources.
  *
  */
-public class TextBuilder {
+public final class TextBuilder {
 
 	private static final String NEWLINE = "\n";
 
@@ -39,15 +41,23 @@ public class TextBuilder {
 
 	public TextBuilder(LanguagePack pack) {
 
+		Preconditions.checkNotNull(pack);
+
 		this.language = pack;
 	}
 
 	public TextBuilder append(String formatId, Object... parms) {
+
+		Preconditions.checkNotNull(formatId);
+
 		builder.append(language.translate(formatId, parms));
 		return this;
 	}
 
 	public TextBuilder appendLiteral(String format, Object... parms) {
+
+		Preconditions.checkNotNull(format);
+
 		builder.append(String.format(format, parms));
 		return this;
 	}
