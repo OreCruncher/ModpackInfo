@@ -29,6 +29,7 @@ import org.blockartistry.mod.ModpackInfo.ModpackInfo;
 import org.blockartistry.mod.ModpackInfo.PackInfo;
 import org.blockartistry.mod.ModpackInfo.PlayerContext;
 import org.blockartistry.mod.ModpackInfo.localization.LanguagePack;
+import org.blockartistry.mod.ModpackInfo.localization.TextBuilder;
 
 import net.minecraft.entity.player.EntityPlayerMP;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
@@ -45,22 +46,19 @@ public class PlayerLoginEventHandler {
 
 	private String getLoginMessage(LanguagePack lang) {
 
-		StringBuilder builder = new StringBuilder();
+		TextBuilder builder = new TextBuilder(lang);
 		PackInfo info = ModpackInfo.instance.getPackInfo();
 
 		if (info.hasValidName()) {
 
-			builder.append(lang.translate("mpinfo.greeting.text",
-					info.getName()));
+			builder.append("mpinfo.greeting.text", info.getName());
 
 			if (info.hasValidVersion()) {
-				builder.append(lang.translate("mpinfo.version.text",
-						info.getVersion()));
+				builder.append("mpinfo.version.text", info.getVersion());
 			}
 
 			if (info.hasValidWebsite()) {
-				builder.append(lang.translate("mpinfo.website.text",
-						info.getWebsite()));
+				builder.append("mpinfo.website.text", info.getWebsite());
 			}
 		}
 

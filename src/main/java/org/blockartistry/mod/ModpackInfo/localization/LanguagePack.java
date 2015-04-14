@@ -84,6 +84,13 @@ public class LanguagePack {
 
 		return result;
 	}
+	
+	/**
+	 * @return The LanguagePack based on the locale of the local system
+	 */
+	public static LanguagePack getLocalLanguagePack() {
+		return getLanguagePack(Locale.getDefault());
+	}
 
 	/**
 	 * Attempts to find a string based on the format ID provided. The result

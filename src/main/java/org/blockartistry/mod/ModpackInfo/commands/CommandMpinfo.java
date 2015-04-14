@@ -33,6 +33,7 @@ import org.blockartistry.mod.ModpackInfo.PackInfo;
 import org.blockartistry.mod.ModpackInfo.PlayerContext;
 import org.blockartistry.mod.ModpackInfo.Player.PlayerEntityHelper;
 import org.blockartistry.mod.ModpackInfo.localization.LanguagePack;
+import org.blockartistry.mod.ModpackInfo.localization.TextBuilder;
 
 import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
@@ -46,36 +47,33 @@ public class CommandMpinfo implements ICommand {
 
 	private String getMpinfoMessage(LanguagePack lang) {
 
-		StringBuilder builder = new StringBuilder();
+		TextBuilder builder = new TextBuilder(lang);
 		PackInfo info = ModpackInfo.instance.getPackInfo();
 
 		if (info.hasValidName()) {
 
-			builder.append(lang.translate("mpinfo.name.text", info.getName()));
+			builder.append("mpinfo.name.text", info.getName());
 
 			if (info.hasValidVersion()) {
-				builder.append(lang.translate("mpinfo.version.text",
-						info.getVersion()));
+				builder.append("mpinfo.version.text", info.getVersion());
 			}
 
 			if (info.hasValidWebsite()) {
-				builder.append(lang.translate("mpinfo.website.text",
-						info.getWebsite()));
+				builder.append("mpinfo.website.text", info.getWebsite());
 			}
 
 			if (info.hasValidAuthors()) {
-				builder.append(lang.translate("mpinfo.authors.text",
-						info.getAuthors()));
+				builder.append("mpinfo.authors.text", info.getAuthors());
 			}
 
 		} else {
-			builder.append(lang.translate("mpinfo.noinfo.text"));
+			builder.append("mpinfo.noinfo.text");
 		}
 
 		return builder.toString();
 	}
 
-	private static List<String> aliases = new ArrayList<String>();
+	private static final List<String> aliases = new ArrayList<String>();
 
 	@Override
 	public int compareTo(Object arg0) {
