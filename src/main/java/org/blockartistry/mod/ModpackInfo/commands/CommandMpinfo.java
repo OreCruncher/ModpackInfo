@@ -28,15 +28,15 @@ package org.blockartistry.mod.ModpackInfo.commands;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.minecraft.command.ICommand;
+import net.minecraft.command.ICommandSender;
+
 import org.blockartistry.mod.ModpackInfo.ModpackInfo;
 import org.blockartistry.mod.ModpackInfo.PackInfo;
 import org.blockartistry.mod.ModpackInfo.PlayerContext;
 import org.blockartistry.mod.ModpackInfo.Player.PlayerEntityHelper;
 import org.blockartistry.mod.ModpackInfo.localization.LanguagePack;
 import org.blockartistry.mod.ModpackInfo.localization.TextBuilder;
-
-import net.minecraft.command.ICommand;
-import net.minecraft.command.ICommandSender;
 
 /**
  * 

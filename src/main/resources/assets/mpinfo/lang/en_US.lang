@@ -1,6 +1,6 @@
-mpinfo.greeting.text=§bYou are playing §6%s§r
-mpinfo.name.text=§6%s§r
-mpinfo.version.text=§e Version %s§r\n
-mpinfo.website.text=§9%s§r\n
-mpinfo.authors.text=§aModpack Authors: §e%s§r\n
-mpinfo.noinfo.text=§cNo information available§r
+mpinfo.greeting.text=§bYou are playing §6{0}§r\n
+mpinfo.name.text=§eModpack: §6{0}§r\n
+mpinfo.version.text=§eVersion: §6{0}§r\n
+mpinfo.website.text=§eSite: §6{0}§r\n
+mpinfo.authors.text=§eAuthors: §6{0}§r\n
+mpinfo.noinfo.text=§cNo information available§r\n

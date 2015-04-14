@@ -25,9 +25,9 @@
 
 package org.blockartistry.mod.ModpackInfo.Player;
 
-import cpw.mods.fml.common.FMLCommonHandler;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.util.ChatComponentText;
+import cpw.mods.fml.common.FMLCommonHandler;
 
 /**
  *

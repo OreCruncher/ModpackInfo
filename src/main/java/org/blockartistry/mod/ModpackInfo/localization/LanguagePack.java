@@ -26,33 +26,43 @@
 package org.blockartistry.mod.ModpackInfo.localization;
 
 import java.io.InputStream;
+import java.text.MessageFormat;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Locale;
-import java.util.Map.Entry;
 
-import net.minecraft.util.StringTranslate;
-
+import org.apache.commons.io.Charsets;
+import org.apache.commons.io.IOUtils;
 import org.blockartistry.mod.ModpackInfo.Assets;
+
+import com.google.common.base.Splitter;
 
 /**
  * LanguagePack manages the language translations for the mod. The strings for
  * multiple languages can be loaded at one time. Application code can look up a
  * translation for any supported language for whatever purpose they may have.
+ * 
+ * At the heart the logic uses MessageFormat to do the necessary processing of
+ * localized strings. This means that the text in the lang files need to use a
+ * different syntax for insertion points than the normal C like String format
+ * codes. See en_US.lang for examples.
  *
  */
 public class LanguagePack {
 
+	private static final Locale LANGUAGE_PACK_DEFAULT = Locale.US;
+	private static final Splitter equalSignSplitter = Splitter.on('=').limit(2);
+
 	private static final HashMap<String, LanguagePack> packs = new HashMap<String, LanguagePack>();
 
 	protected HashMap<String, String> translations = new HashMap<String, String>();
+	protected Locale locale;
 
-	protected LanguagePack(HashMap<String, String> translations) {
+	protected LanguagePack(HashMap<String, String> translations, Locale locale) {
+
 		this.translations = translations;
-
-		for (Entry<String, String> e : this.translations.entrySet()) {
-			this.translations.put(e.getKey(),
-					e.getValue().replaceAll("\\\\r|\\\\n", "\n"));
-		}
+		this.locale = locale;
 	}
 
 	/**
@@ -64,7 +74,28 @@ public class LanguagePack {
 	 */
 	public static LanguagePack getLanguagePack(Locale locale) {
 
-		return getLanguagePack(locale.toString());
+		String langToGet = locale.toString();
+
+		// Get the pack from our cached list
+		LanguagePack result = packs.get(langToGet);
+
+		// If we didn't get a hit..
+		if (result == null) {
+
+			// ...try loading it from resources
+			if (inject(locale)) {
+				// Successful load - get it from our list
+				result = packs.get(langToGet);
+			} else {
+				// Couldn't load it, so go with the default pack. We make a map
+				// entry as to this fact so logic can avoid repeated attempts
+				// at loading a language resource that is going to fail.
+				result = packs.get(LANGUAGE_PACK_DEFAULT.toString());
+				packs.put(langToGet, result);
+			}
+		}
+
+		return result;
 	}
 
 	/**
@@ -77,14 +108,17 @@ public class LanguagePack {
 	 */
 	public static LanguagePack getLanguagePack(String localeString) {
 
-		LanguagePack result = packs.get(localeString);
-		if (result == null) {
-			result = packs.get(Locale.US.toString());
-		}
-
-		return result;
+		String[] tokens = localeString.split("_");
+		return getLanguagePack(new Locale(tokens[0], tokens[1]));
 	}
-	
+
+	/**
+	 * @return The Locale of the language pack
+	 */
+	public Locale getLanguagePackLocale() {
+		return locale;
+	}
+
 	/**
 	 * @return The LanguagePack based on the locale of the local system
 	 */
@@ -124,23 +158,56 @@ public class LanguagePack {
 	public String translate(String formatId, Object... parms) {
 
 		String s = translations.getOrDefault(formatId, formatId);
-		return String.format(s, parms);
+		return (new MessageFormat(s, locale)).format(parms);
 	}
 
-	private static void inject(Locale locale) {
+	private static HashMap<String, String> parseLangFile(InputStream inputstream) {
+		HashMap<String, String> table = new HashMap<String, String>();
+		try {
+			Iterator<String> iterator = IOUtils.readLines(inputstream,
+					Charsets.UTF_8).iterator();
 
-		InputStream is = Assets.getLanguageFile(locale);
+			while (iterator.hasNext()) {
+				String s = iterator.next();
 
-		if (is != null) {
-			HashMap<String, String> strings = StringTranslate.parseLangFile(is);
-			packs.put(locale.toString(), new LanguagePack(strings));
+				// The '#' is a comment
+				if (!s.isEmpty() && s.charAt(0) != '#') {
+					List<String> astring = equalSignSplitter.splitToList(s);
+
+					// When processing the string value we need to make sure
+					// that newline tokens are corrected.
+					if (astring != null && astring.size() == 2) {
+						table.put(astring.get(0),
+								astring.get(1).replaceAll("\\\\r|\\\\n", "\n"));
+					}
+				}
+			}
+
+		} catch (Exception ioexception) {
+			ioexception.printStackTrace();
 		}
+		
+		return table;
+	}
+
+	private static boolean inject(Locale locale) {
+
+		InputStream is = Assets.getLanguageFile(locale.toString());
+
+		if (is == null)
+			return false;
+			
+		HashMap<String, String> strings = parseLangFile(is);
+		packs.put(locale.toString(), new LanguagePack(strings, locale));
+		
+		is = null;
+		return true;
 	}
 
 	static {
 
 		// The US locale is always present in the mod, so it gets loaded. This
 		// becomes the goto locale if a string is not found in another language.
-		inject(Locale.US);
+		inject(LANGUAGE_PACK_DEFAULT);
 	}
 }

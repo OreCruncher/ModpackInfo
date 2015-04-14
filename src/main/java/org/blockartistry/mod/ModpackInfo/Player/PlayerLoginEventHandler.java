@@ -25,13 +25,14 @@
 
 package org.blockartistry.mod.ModpackInfo.Player;
 
+import net.minecraft.entity.player.EntityPlayerMP;
+
 import org.blockartistry.mod.ModpackInfo.ModpackInfo;
 import org.blockartistry.mod.ModpackInfo.PackInfo;
 import org.blockartistry.mod.ModpackInfo.PlayerContext;
 import org.blockartistry.mod.ModpackInfo.localization.LanguagePack;
 import org.blockartistry.mod.ModpackInfo.localization.TextBuilder;
 
-import net.minecraft.entity.player.EntityPlayerMP;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
 

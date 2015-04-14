@@ -31,7 +31,7 @@ package org.blockartistry.mod.ModpackInfo.localization;
  *
  */
 public class TextBuilder {
-	
+
 	private static final String NEWLINE = "\n";
 
 	protected LanguagePack language;

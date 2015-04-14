@@ -28,13 +28,13 @@ package org.blockartistry.mod.ModpackInfo;
 import java.lang.reflect.Field;
 import java.util.Locale;
 
-import org.blockartistry.mod.ModpackInfo.localization.LanguagePack;
-
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.util.IChatComponent;
 import net.minecraft.world.World;
+
+import org.blockartistry.mod.ModpackInfo.localization.LanguagePack;
 
 /**
  * Brings data from several sources together into one entity for ease of use

@@ -28,7 +28,6 @@ package org.blockartistry.mod.ModpackInfo;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.Locale;
 
 import net.minecraft.launchwrapper.Launch;
 
@@ -142,9 +141,9 @@ public class Assets {
 		return new BufferedReader(new InputStreamReader(in));
 	}
 
-	public static InputStream getLanguageFile(Locale locale) {
+	public static InputStream getLanguageFile(String locale) {
 
-		String assetPath = getAssetPath(LANG_RESOURCE_PATH, locale.toString()
+		String assetPath = getAssetPath(LANG_RESOURCE_PATH, locale
 				+ LANG_RESOURCE_EXTENSION);
 
 		InputStream in = ModpackInfo.instance.getClass().getResourceAsStream(
