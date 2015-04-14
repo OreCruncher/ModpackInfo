@@ -22,3 +22,11 @@
 /.project
 /.settings/
 /ModpackInfo.xml
+/eula.txt
+/world/
+/banned-ips.json
+/banned-players.json
+/server.properties
+/usercache.json
+/whitelist.json
+/ops.json

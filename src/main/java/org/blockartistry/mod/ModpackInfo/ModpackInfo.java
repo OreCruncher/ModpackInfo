@@ -57,7 +57,7 @@ import cpw.mods.fml.common.event.FMLServerStoppingEvent;
  * information to a log file on disk.
  * 
  */
-@Mod(modid = ModpackInfo.MOD_ID, useMetadata = true, dependencies = ModpackInfo.DEPENDENCIES, version = ModpackInfo.VERSION)
+@Mod(modid = ModpackInfo.MOD_ID, useMetadata = true, dependencies = ModpackInfo.DEPENDENCIES, version = ModpackInfo.VERSION, acceptableRemoteVersions = "*")
 public final class ModpackInfo {
 
 	@Instance
@@ -77,7 +77,7 @@ public final class ModpackInfo {
 
 	public static final String MOD_ID = "mpinfo";
 	public static final String MOD_NAME = "ModpackInfo";
-	public static final String VERSION = "0.0.1";
+	public static final String VERSION = "0.0.3";
 	public static final String DEPENDENCIES = "after:*";
 
 	private static final String FILE_NAME = "ModpackInfo";

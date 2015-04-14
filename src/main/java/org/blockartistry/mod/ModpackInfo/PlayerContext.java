@@ -47,7 +47,11 @@ public class PlayerContext implements ICommandSender {
 	private static Field epField;
 	static {
 		try {
-			epField = EntityPlayerMP.class.getDeclaredField("translator");
+			// Need to use the right field name...
+			if(Assets.runningAsDevelopment())
+				epField = EntityPlayerMP.class.getDeclaredField("translator");
+			else
+				epField = EntityPlayerMP.class.getDeclaredField("field_71148_cg");
 			epField.setAccessible(true);
 		} catch (NoSuchFieldException e) {
 			e.printStackTrace();
@@ -61,17 +65,21 @@ public class PlayerContext implements ICommandSender {
 	public PlayerContext(ICommandSender sender) {
 		this.sender = sender;
 
-		if (sender instanceof EntityPlayerMP) {
+		if (sender instanceof EntityPlayerMP && epField != null) {
 			EntityPlayerMP ep = (EntityPlayerMP) sender;
 			try {
 				localeString = epField.get(ep).toString();
-			} catch (IllegalArgumentException | IllegalAccessException e) {
+			} catch (IllegalArgumentException e) {
+				e.printStackTrace();
+			} catch (IllegalAccessException e) {
 				e.printStackTrace();
 			}
 		}
 
+		// If for some reason the sender is not a player, or couldn't get
+		// hold of the client locale, use the default.
 		if (localeString == null || localeString.isEmpty()) {
-			localeString = Locale.US.toString();
+			localeString = LanguagePack.LANGUAGE_PACK_DEFAULT.toString();
 		}
 
 		language = LanguagePack.getLanguagePack(localeString);

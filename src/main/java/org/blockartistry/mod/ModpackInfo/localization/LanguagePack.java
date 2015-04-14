@@ -51,7 +51,7 @@ import com.google.common.base.Splitter;
  */
 public class LanguagePack {
 
-	private static final Locale LANGUAGE_PACK_DEFAULT = Locale.US;
+	public static final Locale LANGUAGE_PACK_DEFAULT = Locale.US;
 	private static final Splitter equalSignSplitter = Splitter.on('=').limit(2);
 
 	private static final HashMap<String, LanguagePack> packs = new HashMap<String, LanguagePack>();
