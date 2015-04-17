@@ -58,10 +58,10 @@ import cpw.mods.fml.common.event.FMLServerStoppingEvent;
  * 
  */
 @Mod(modid = ModpackInfo.MOD_ID, useMetadata = true, dependencies = ModpackInfo.DEPENDENCIES, version = ModpackInfo.VERSION, acceptableRemoteVersions = "*")
-public final class ModpackInfo {
+public class ModpackInfo {
 
 	@Instance
-	public static final ModpackInfo instance = new ModpackInfo();
+	public static ModpackInfo instance = new ModpackInfo();
 
 	private static final String TEXT_OPTION_OUTPUT_TYPE = "Output Type";
 	private static final String TEXT_OPTION_OUTPUT_TYPE_COMMENT = "Type of output to generate ("
@@ -105,7 +105,6 @@ public final class ModpackInfo {
 		// Need to get the root of the MC directory so we can save our output
 		// file
 		mcDir = event.getModConfigurationDirectory().getParentFile();
-
 		log = event.getModLog();
 
 		// Load up our configuration
