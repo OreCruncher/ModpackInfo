@@ -3,7 +3,7 @@
 		"modid": "mpinfo",
 		"name": "Modpack Info",
 		"description": "Provides modpack info via log files and in-game commands",
-		"version": "0.0.3",
+		"version": "0.0.4",
 		"mcversion": "1.7.10",
 		"url": "https://github.com/OreCruncher/ModpackInfo/wiki",
 		"updateUrl": "",
