@@ -1,0 +1,10 @@
+language: java
+
+jdk:
+- oracle7sdk
+
+branches:
+  only:
+    - master
+
+script: "./gradlew build"
