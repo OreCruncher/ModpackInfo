@@ -27,6 +27,7 @@ package org.blockartistry.mod.ModpackInfo;
 
 import java.util.HashMap;
 
+import org.apache.commons.lang3.StringUtils;
 import org.blockartistry.mod.ModpackInfo.attributes.AttributeProviderType;
 
 import com.google.common.base.Preconditions;
@@ -140,6 +141,6 @@ public enum OutputType {
 		for (OutputType ft : values()) {
 			nameMapping.put(ft.getFriendlyName(), ft);
 		}
-		nameString = String.join("|", nameMapping.keySet());
+		nameString = StringUtils.join("|", nameMapping.keySet());
 	}
 }

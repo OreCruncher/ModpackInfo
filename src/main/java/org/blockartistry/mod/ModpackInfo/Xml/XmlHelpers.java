@@ -38,6 +38,7 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamSource;
 
+import org.apache.commons.lang3.StringUtils;
 import org.blockartistry.mod.ModpackInfo.PackInfo;
 import org.blockartistry.mod.ModpackInfo.attributes.AttributeProvider;
 import org.w3c.dom.Document;
@@ -209,7 +210,7 @@ public final class XmlHelpers {
 
 			if (meta.authorList != null && !meta.authorList.isEmpty()) {
 				addProperty(doc, modInfo, "authors",
-						String.join(", ", meta.authorList));
+						StringUtils.join(", ", meta.authorList));
 			}
 
 			addProperty(doc, modInfo, "url",

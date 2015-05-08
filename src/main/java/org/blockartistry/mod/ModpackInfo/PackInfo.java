@@ -25,6 +25,8 @@
 
 package org.blockartistry.mod.ModpackInfo;
 
+import org.apache.commons.lang3.StringUtils;
+
 import net.minecraftforge.common.config.Configuration;
 
 import com.google.common.base.Preconditions;
@@ -151,7 +153,7 @@ public final class PackInfo {
 				"", "Description of the modpack").getString());
 		modpackCredits = (config.get(CATEGORY_MODPACK_INFO, "credits", "",
 				"Credits of the modpack").getString());
-		modpackAuthors = String.join(",",
+		modpackAuthors = StringUtils.join(",",
 				(config.getStringList("authors", CATEGORY_MODPACK_INFO,
 						new String[0], "Authors of the modpack")));
 		modpackWebsite = (config.get(CATEGORY_MODPACK_INFO, "website", "",

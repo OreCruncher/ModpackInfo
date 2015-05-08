@@ -167,7 +167,9 @@ public final class LanguagePack {
 
 		Preconditions.checkNotNull(formatId);
 
-		String s = translations.getOrDefault(formatId, formatId);
+		String s = translations.get(formatId);
+		if(s == null)
+			s = formatId;
 		return (new MessageFormat(s, locale)).format(parms);
 	}
 

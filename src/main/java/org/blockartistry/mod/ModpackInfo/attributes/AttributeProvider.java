@@ -27,6 +27,8 @@ package org.blockartistry.mod.ModpackInfo.attributes;
 
 import javax.xml.transform.Transformer;
 
+import org.apache.commons.lang3.StringUtils;
+
 import net.minecraftforge.common.config.Configuration;
 
 /**
@@ -54,7 +56,7 @@ public abstract class AttributeProvider {
 
 	protected static String getKey(String category, String field,
 			String orientation) {
-		return String.join(".", category, field, orientation);
+		return StringUtils.join(".", category, field, orientation);
 	}
 
 	/**

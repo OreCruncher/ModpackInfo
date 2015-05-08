@@ -168,7 +168,10 @@ public class BBCodeAttributeProvider extends AttributeProvider {
 			String field, String orientation) {
 
 		String key = getKey(category, field, orientation);
-		transformer.setParameter(key, codes.getOrDefault(key, TEXT_DEFAULT));
+		String code = codes.get(key);
+		if(code == null)
+			code = TEXT_DEFAULT;
+		transformer.setParameter(key, code);
 	}
 
 	protected void transformerHelper(Transformer transformer, String category,
