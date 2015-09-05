@@ -44,7 +44,6 @@ public final class Assets {
 
 	private static final String PATH_SEP = "/";
 	private static final String ASSET_ROOT = "/assets";
-	private static final String ASSET_ROOT_DEV = "/";
 	private static final String SHEET_RESOURCE_PATH = "xlatesheets";
 	private static final String SHEET_RESOURCE_EXTENSION = ".xsl";
 	private static final String LANG_RESOURCE_PATH = "lang";
@@ -102,10 +101,7 @@ public final class Assets {
 	public static String getAssetsRootPath() {
 
 		if (assetPath == null) {
-			if (developmentEnvironment)
-				assetPath = ASSET_ROOT_DEV;
-			else
-				assetPath = combine(ASSET_ROOT, ModpackInfo.MOD_ID);
+			assetPath = combine(ASSET_ROOT, ModpackInfo.MOD_ID);
 		}
 		return assetPath;
 	}
@@ -124,8 +120,6 @@ public final class Assets {
 		Preconditions.checkNotNull(assetFolder);
 		Preconditions.checkNotNull(asset);
 
-		if (runningAsDevelopment())
-			return combine(getAssetsRootPath(), asset);
 		return combine(getAssetsRootPath(), assetFolder, asset);
 	}
 

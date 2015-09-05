@@ -32,16 +32,17 @@ import javax.xml.transform.stream.StreamResult;
 
 import net.minecraftforge.common.config.Configuration;
 
-import org.apache.logging.log4j.Level;
-import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 import org.blockartistry.mod.ModpackInfo.Player.PlayerEntityHelper;
 import org.blockartistry.mod.ModpackInfo.Xml.XmlHelpers;
 import org.blockartistry.mod.ModpackInfo.attributes.AttributeProvider;
 import org.blockartistry.mod.ModpackInfo.commands.CommandHelper;
+import org.blockartistry.mod.ModpackInfo.proxy.Proxy;
 import org.w3c.dom.Document;
 
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.Mod;
+import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.Mod.Instance;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
@@ -74,6 +75,8 @@ public class ModpackInfo {
 	private static final String TEXT_OPTION_ENABLE_COMMANDS = "Enable Commands";
 	private static final String TEXT_OPTION_ENABLE_COMMANDS_COMMENT = "Enable commands for player use (true|false)";
 	private static final boolean DEFAULT_ENABLE_COMMANDS = true;
+	private static final String TEXT_OPTION_ENABLE_VERSION_CHECK = "Enable Online Version Check";
+	private static final boolean DEFAULT_ENABLE_ONLINE_VERSION_CHECK = true;
 
 	public static final String MOD_ID = "mpinfo";
 	public static final String MOD_NAME = "ModpackInfo";
@@ -83,7 +86,6 @@ public class ModpackInfo {
 	private static final String FILE_NAME = "ModpackInfo";
 
 	private File mcDir;
-	private Logger log;
 
 	protected PackInfo info;
 	protected AttributeProvider cc;
@@ -91,6 +93,18 @@ public class ModpackInfo {
 	private OutputType fType = OutputType.TEXT;
 	private boolean displayLoginGreeting = DEFAULT_DISPLAY_GREETING;
 	private boolean enableCommands = DEFAULT_ENABLE_COMMANDS;
+	public boolean enableOnlineVersionCheck = DEFAULT_ENABLE_ONLINE_VERSION_CHECK;
+	
+	@SidedProxy(clientSide = "org.blockartistry.mod.ModpackInfo.proxy.ProxyClient", serverSide = "org.blockartistry.mod.ModpackInfo.proxy.Proxy")
+	protected static Proxy proxy;
+
+	public static Proxy proxy() {
+		return proxy;
+	}
+
+	public ModpackInfo() {
+		ModLog.setLogger(LogManager.getLogger(MOD_ID));
+	}
 
 	/**
 	 * @return Information about the modpack as indicated in the config file.
@@ -105,7 +119,6 @@ public class ModpackInfo {
 		// Need to get the root of the MC directory so we can save our output
 		// file
 		mcDir = event.getModConfigurationDirectory().getParentFile();
-		log = event.getModLog();
 
 		// Load up our configuration
 		Configuration config = new Configuration(
@@ -121,7 +134,7 @@ public class ModpackInfo {
 					.getString());
 
 			if (fType == null) {
-				log.warn(
+				ModLog.warn(
 						"Unknown OutputType in configuration; defaulting to '%s'",
 						DEFAULT_OUTPUT_TYPE);
 				fType = OutputType.getValueByName(DEFAULT_OUTPUT_TYPE);
@@ -139,9 +152,13 @@ public class ModpackInfo {
 			enableCommands = config.get(Configuration.CATEGORY_GENERAL,
 					TEXT_OPTION_ENABLE_COMMANDS, DEFAULT_ENABLE_COMMANDS,
 					TEXT_OPTION_ENABLE_COMMANDS_COMMENT).getBoolean();
+			
+			enableOnlineVersionCheck = config.get(Configuration.CATEGORY_GENERAL,
+					TEXT_OPTION_ENABLE_VERSION_CHECK, DEFAULT_ENABLE_ONLINE_VERSION_CHECK,
+					"Enable online version checking").getBoolean();
 
 		} catch (Exception e) {
-			log.log(Level.WARN, "Unable to read config file!", e);
+			ModLog.warn("Unable to read config file!", e);
 			e.printStackTrace();
 			fType = OutputType.TEXT;
 		}
@@ -155,10 +172,10 @@ public class ModpackInfo {
 		// Register our greeting handler if it is configured
 		if (displayLoginGreeting) {
 
-			log.info("Registering for player login events");
+			ModLog.info("Registering for player login events");
 			PlayerEntityHelper.registerEventHandlers();
 		} else {
-			log.info("Not registering for player login events");
+			ModLog.info("Not registering for player login events");
 		}
 	}
 
@@ -171,8 +188,7 @@ public class ModpackInfo {
 					.getModList());
 
 			if (doc == null) {
-				log.log(Level.WARN,
-						"Unable to generate XML document for conversion!");
+				ModLog.warn("Unable to generate XML document for conversion!");
 				return;
 			}
 
@@ -185,8 +201,7 @@ public class ModpackInfo {
 					new StreamResult(new File(mcDir, fileName)));
 
 		} catch (TransformerException e) {
-			log.log(Level.WARN,
-					"Unable to transform XML document into mod listing!");
+			ModLog.warn("Unable to transform XML document into mod listing!");
 			e.printStackTrace();
 		}
 	}
@@ -195,10 +210,10 @@ public class ModpackInfo {
 	public void serverLoad(FMLServerStartingEvent event) {
 		// Register our commands
 		if (enableCommands) {
-			log.info("Registering command handlers");
+			ModLog.info("Registering command handlers");
 			CommandHelper.registerCommands(event);
 		} else {
-			log.info("Not registering command handlers");
+			ModLog.info("Not registering command handlers");
 		}
 	}
 
