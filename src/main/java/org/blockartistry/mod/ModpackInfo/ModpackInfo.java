@@ -35,7 +35,6 @@ import net.minecraftforge.common.config.Configuration;
 import org.apache.logging.log4j.LogManager;
 import org.blockartistry.mod.ModpackInfo.Player.PlayerEntityHelper;
 import org.blockartistry.mod.ModpackInfo.Xml.XmlHelpers;
-import org.blockartistry.mod.ModpackInfo.attributes.AttributeProvider;
 import org.blockartistry.mod.ModpackInfo.commands.CommandHelper;
 import org.blockartistry.mod.ModpackInfo.proxy.Proxy;
 import org.w3c.dom.Document;
@@ -64,20 +63,6 @@ public class ModpackInfo {
 	@Instance
 	public static ModpackInfo instance = new ModpackInfo();
 
-	private static final String TEXT_OPTION_OUTPUT_TYPE = "Output Type";
-	private static final String TEXT_OPTION_OUTPUT_TYPE_COMMENT = "Type of output to generate ("
-			+ OutputType.getNameValueString() + ")";
-	private static final String DEFAULT_OUTPUT_TYPE = OutputType.TEXT
-			.getFriendlyName();
-	private static final String TEXT_OPTION_DISPLAY_GREETING = "Display Greeting";
-	private static final String TEXT_OPTION_DISPLAY_GREETING_COMMENT = "Display greeting when player logs in (true|false)";
-	private static final boolean DEFAULT_DISPLAY_GREETING = true;
-	private static final String TEXT_OPTION_ENABLE_COMMANDS = "Enable Commands";
-	private static final String TEXT_OPTION_ENABLE_COMMANDS_COMMENT = "Enable commands for player use (true|false)";
-	private static final boolean DEFAULT_ENABLE_COMMANDS = true;
-	private static final String TEXT_OPTION_ENABLE_VERSION_CHECK = "Enable Online Version Check";
-	private static final boolean DEFAULT_ENABLE_ONLINE_VERSION_CHECK = true;
-
 	public static final String MOD_ID = "mpinfo";
 	public static final String MOD_NAME = "ModpackInfo";
 	public static final String VERSION = "0.1.0";
@@ -87,14 +72,6 @@ public class ModpackInfo {
 
 	private File mcDir;
 
-	protected PackInfo info;
-	protected AttributeProvider cc;
-
-	private OutputType fType = OutputType.TEXT;
-	private boolean displayLoginGreeting = DEFAULT_DISPLAY_GREETING;
-	private boolean enableCommands = DEFAULT_ENABLE_COMMANDS;
-	public boolean enableOnlineVersionCheck = DEFAULT_ENABLE_ONLINE_VERSION_CHECK;
-	
 	@SidedProxy(clientSide = "org.blockartistry.mod.ModpackInfo.proxy.ProxyClient", serverSide = "org.blockartistry.mod.ModpackInfo.proxy.Proxy")
 	protected static Proxy proxy;
 
@@ -106,13 +83,6 @@ public class ModpackInfo {
 		ModLog.setLogger(LogManager.getLogger(MOD_ID));
 	}
 
-	/**
-	 * @return Information about the modpack as indicated in the config file.
-	 */
-	public PackInfo getPackInfo() {
-		return info;
-	}
-
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event) {
 
@@ -121,57 +91,20 @@ public class ModpackInfo {
 		mcDir = event.getModConfigurationDirectory().getParentFile();
 
 		// Load up our configuration
-		Configuration config = new Configuration(
-				event.getSuggestedConfigurationFile());
+		Configuration config = new Configuration(event.getSuggestedConfigurationFile());
 
 		config.load();
-
-		try {
-
-			fType = OutputType.getValueByName(config.get(
-					Configuration.CATEGORY_GENERAL, TEXT_OPTION_OUTPUT_TYPE,
-					DEFAULT_OUTPUT_TYPE, TEXT_OPTION_OUTPUT_TYPE_COMMENT)
-					.getString());
-
-			if (fType == null) {
-				ModLog.warn(
-						"Unknown OutputType in configuration; defaulting to '%s'",
-						DEFAULT_OUTPUT_TYPE);
-				fType = OutputType.getValueByName(DEFAULT_OUTPUT_TYPE);
-			}
-
-			info = new PackInfo();
-			PackInfo.init(config);
-
-			cc = fType.getAttributeProviderType().getProvider(config);
-
-			displayLoginGreeting = config.get(Configuration.CATEGORY_GENERAL,
-					TEXT_OPTION_DISPLAY_GREETING, DEFAULT_DISPLAY_GREETING,
-					TEXT_OPTION_DISPLAY_GREETING_COMMENT).getBoolean();
-
-			enableCommands = config.get(Configuration.CATEGORY_GENERAL,
-					TEXT_OPTION_ENABLE_COMMANDS, DEFAULT_ENABLE_COMMANDS,
-					TEXT_OPTION_ENABLE_COMMANDS_COMMENT).getBoolean();
-			
-			enableOnlineVersionCheck = config.get(Configuration.CATEGORY_GENERAL,
-					TEXT_OPTION_ENABLE_VERSION_CHECK, DEFAULT_ENABLE_ONLINE_VERSION_CHECK,
-					"Enable online version checking").getBoolean();
-
-		} catch (Exception e) {
-			ModLog.warn("Unable to read config file!", e);
-			e.printStackTrace();
-			fType = OutputType.TEXT;
-		}
+		ModOptions.load(config);
+		config.save();
 
 		proxy.preInit(event, config);
-		config.save();
 	}
 
 	@EventHandler
 	public void init(FMLInitializationEvent event) {
 
 		// Register our greeting handler if it is configured
-		if (displayLoginGreeting) {
+		if (ModOptions.getDisplayLoginGreeting()) {
 
 			ModLog.info("Registering for player login events");
 			PlayerEntityHelper.registerEventHandlers();
@@ -185,8 +118,7 @@ public class ModpackInfo {
 
 		try {
 			// Get our modlist XML
-			Document doc = XmlHelpers.toXml(info, Loader.instance()
-					.getModList());
+			Document doc = XmlHelpers.toXml(Loader.instance().getModList());
 
 			if (doc == null) {
 				ModLog.warn("Unable to generate XML document for conversion!");
@@ -195,11 +127,11 @@ public class ModpackInfo {
 
 			// Make our output filename
 			String fileName = String.format("%s%s%s", FILE_NAME, ".",
-					fType.getFileNameExtension());
+					ModOptions.getOutputType().getFileNameExtension());
 
 			// Transform!
-			XmlHelpers.saveTo(doc, Assets.getTransformSheet(fType), cc,
-					new StreamResult(new File(mcDir, fileName)));
+			XmlHelpers.saveTo(doc, Assets.getTransformSheet(ModOptions.getOutputType()),
+					ModOptions.getAttributeProvider(), new StreamResult(new File(mcDir, fileName)));
 
 		} catch (TransformerException e) {
 			ModLog.warn("Unable to transform XML document into mod listing!");
@@ -210,7 +142,7 @@ public class ModpackInfo {
 	@EventHandler
 	public void serverLoad(FMLServerStartingEvent event) {
 		// Register our commands
-		if (enableCommands) {
+		if (ModOptions.getEnableCommands()) {
 			ModLog.info("Registering command handlers");
 			CommandHelper.registerCommands(event);
 		} else {

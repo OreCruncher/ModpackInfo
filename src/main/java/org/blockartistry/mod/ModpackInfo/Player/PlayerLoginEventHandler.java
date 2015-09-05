@@ -25,7 +25,6 @@
 
 package org.blockartistry.mod.ModpackInfo.Player;
 
-import org.blockartistry.mod.ModpackInfo.ModpackInfo;
 import org.blockartistry.mod.ModpackInfo.PackInfo;
 import org.blockartistry.mod.ModpackInfo.PlayerContext;
 import org.blockartistry.mod.ModpackInfo.localization.LanguagePack;
@@ -48,18 +47,17 @@ public final class PlayerLoginEventHandler {
 	private String getLoginMessage(LanguagePack lang) {
 
 		TextBuilder builder = new TextBuilder(lang);
-		PackInfo info = ModpackInfo.instance.getPackInfo();
 
-		if (info.hasValidName()) {
+		if (PackInfo.hasValidName()) {
 
-			builder.append("mpinfo.greeting.text", info.getName());
+			builder.append("mpinfo.greeting.text", PackInfo.getName());
 
-			if (info.hasValidVersion()) {
-				builder.append("mpinfo.version.text", info.getVersion());
+			if (PackInfo.hasValidVersion()) {
+				builder.append("mpinfo.version.text", PackInfo.getVersion());
 			}
 
-			if (info.hasValidWebsite()) {
-				builder.append("mpinfo.website.text", info.getWebsite());
+			if (PackInfo.hasValidWebsite()) {
+				builder.append("mpinfo.website.text", PackInfo.getWebsite());
 			}
 		}
 

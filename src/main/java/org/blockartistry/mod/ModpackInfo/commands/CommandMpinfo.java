@@ -31,7 +31,6 @@ import java.util.List;
 import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
 
-import org.blockartistry.mod.ModpackInfo.ModpackInfo;
 import org.blockartistry.mod.ModpackInfo.PackInfo;
 import org.blockartistry.mod.ModpackInfo.PlayerContext;
 import org.blockartistry.mod.ModpackInfo.Player.PlayerEntityHelper;
@@ -48,22 +47,21 @@ public class CommandMpinfo implements ICommand {
 	private String getMpinfoMessage(LanguagePack lang) {
 
 		TextBuilder builder = new TextBuilder(lang);
-		PackInfo info = ModpackInfo.instance.getPackInfo();
 
-		if (info.hasValidName()) {
+		if (PackInfo.hasValidName()) {
 
-			builder.append("mpinfo.name.text", info.getName());
+			builder.append("mpinfo.name.text", PackInfo.getName());
 
-			if (info.hasValidVersion()) {
-				builder.append("mpinfo.version.text", info.getVersion());
+			if (PackInfo.hasValidVersion()) {
+				builder.append("mpinfo.version.text", PackInfo.getVersion());
 			}
 
-			if (info.hasValidWebsite()) {
-				builder.append("mpinfo.website.text", info.getWebsite());
+			if (PackInfo.hasValidWebsite()) {
+				builder.append("mpinfo.website.text", PackInfo.getWebsite());
 			}
 
-			if (info.hasValidAuthors()) {
-				builder.append("mpinfo.authors.text", info.getAuthors());
+			if (PackInfo.hasValidAuthors()) {
+				builder.append("mpinfo.authors.text", PackInfo.getAuthors());
 			}
 
 		} else {

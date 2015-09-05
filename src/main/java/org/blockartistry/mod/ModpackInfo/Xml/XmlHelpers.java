@@ -68,7 +68,7 @@ public final class XmlHelpers {
 	 *            List of mods to include in the output
 	 * @return An Xml document suitable for further processing
 	 */
-	public static Document toXml(PackInfo info, List<ModContainer> mods) {
+	public static Document toXml(List<ModContainer> mods) {
 
 		Document doc = null;
 
@@ -83,7 +83,7 @@ public final class XmlHelpers {
 			doc.appendChild(root);
 
 			// Add our pack info
-			addPackInfo(doc, root, info);
+			addPackInfo(doc, root);
 
 			// Create our list of mods
 			Element modList = doc.createElement("modlist");
@@ -160,30 +160,27 @@ public final class XmlHelpers {
 		parent.appendChild(e);
 	}
 
-	protected static void addPackInfo(Document doc, Element parent,
-			PackInfo info) {
+	protected static void addPackInfo(Document doc, Element parent) {
 
 		Element pack = doc.createElement("Pack");
 
-		if (info != null) {
-			if (info.hasValidName())
-				addProperty(doc, pack, "name", info.getName());
+		if (PackInfo.hasValidName())
+			addProperty(doc, pack, "name", PackInfo.getName());
 
-			if (info.hasValidVersion())
-				addProperty(doc, pack, "version", info.getVersion());
+		if (PackInfo.hasValidVersion())
+			addProperty(doc, pack, "version", PackInfo.getVersion());
 
-			if (info.hasValidDescription())
-				addProperty(doc, pack, "description", info.getDescription());
+		if (PackInfo.hasValidDescription())
+			addProperty(doc, pack, "description", PackInfo.getDescription());
 
-			if (info.hasValidCredits())
-				addProperty(doc, pack, "credits", info.getCredits());
+		if (PackInfo.hasValidCredits())
+			addProperty(doc, pack, "credits", PackInfo.getCredits());
 
-			if (info.hasValidAuthors())
-				addProperty(doc, pack, "authors", info.getAuthors());
+		if (PackInfo.hasValidAuthors())
+			addProperty(doc, pack, "authors", PackInfo.getAuthors());
 
-			if (info.hasValidWebsite())
-				addProperty(doc, pack, "website", info.getWebsite());
-		}
+		if (PackInfo.hasValidWebsite())
+			addProperty(doc, pack, "website", PackInfo.getWebsite());
 
 		parent.appendChild(pack);
 	}
@@ -210,7 +207,7 @@ public final class XmlHelpers {
 
 			if (meta.authorList != null && !meta.authorList.isEmpty()) {
 				addProperty(doc, modInfo, "authors",
-						StringUtils.join(", ", meta.authorList));
+						StringUtils.join(meta.authorList, ", "));
 			}
 
 			addProperty(doc, modInfo, "url",

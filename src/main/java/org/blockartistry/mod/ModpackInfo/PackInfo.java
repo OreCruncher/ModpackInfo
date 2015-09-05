@@ -51,28 +51,28 @@ public final class PackInfo {
 	/**
 	 * @return The name of the modpack as defined in the configuration file
 	 */
-	public String getName() {
+	public static String getName() {
 		return modpackName;
 	}
 
 	/**
 	 * @return Indicates whether the modpack name is valid
 	 */
-	public boolean hasValidName() {
+	public static boolean hasValidName() {
 		return modpackName != null && !modpackName.isEmpty();
 	}
 
 	/**
 	 * @return The version of the modpack as defined in the configuration file
 	 */
-	public String getVersion() {
+	public static String getVersion() {
 		return modpackVersion;
 	}
 
 	/**
 	 * @return Indicates whether the modpack version is valid
 	 */
-	public boolean hasValidVersion() {
+	public static boolean hasValidVersion() {
 		return modpackVersion != null && !modpackVersion.isEmpty();
 	}
 
@@ -80,60 +80,60 @@ public final class PackInfo {
 	 * @return The description of the modpack as defined in the configuration
 	 *         file
 	 */
-	public String getDescription() {
+	public static String getDescription() {
 		return modpackDescription;
 	}
 
 	/**
 	 * @return Indicates whether the modpack description is valid
 	 */
-	public boolean hasValidDescription() {
+	public static boolean hasValidDescription() {
 		return modpackDescription != null && !modpackDescription.isEmpty();
 	}
 
 	/**
 	 * @return The credits of the modpack as defined in the configuration file
 	 */
-	public String getCredits() {
+	public static String getCredits() {
 		return modpackCredits;
 	}
 
 	/**
 	 * @return Indicates whether the modpack credits is valid
 	 */
-	public boolean hasValidCredits() {
+	public static boolean hasValidCredits() {
 		return modpackCredits != null && !modpackCredits.isEmpty();
 	}
 
 	/**
 	 * @return The authors of the modpack as defined in the configuration file
 	 */
-	public String getAuthors() {
+	public static String getAuthors() {
 		return modpackAuthors;
 	}
 
 	/**
 	 * @return Indicates whether the modpack authors is valid
 	 */
-	public boolean hasValidAuthors() {
+	public static boolean hasValidAuthors() {
 		return modpackAuthors != null && !modpackAuthors.isEmpty();
 	}
 
 	/**
 	 * @return The website of the modpack as defined in the configuration file
 	 */
-	public String getWebsite() {
+	public static String getWebsite() {
 		return modpackWebsite;
 	}
 
 	/**
 	 * @return Indicates whether the modpack website is valid
 	 */
-	public boolean hasValidWebsite() {
+	public static boolean hasValidWebsite() {
 		return modpackWebsite != null && !modpackWebsite.isEmpty();
 	}
 
-	public PackInfo() {
+	private PackInfo() {
 	}
 
 	/**
@@ -153,9 +153,8 @@ public final class PackInfo {
 				"", "Description of the modpack").getString());
 		modpackCredits = (config.get(CATEGORY_MODPACK_INFO, "credits", "",
 				"Credits of the modpack").getString());
-		modpackAuthors = StringUtils.join(",",
-				(config.getStringList("authors", CATEGORY_MODPACK_INFO,
-						new String[0], "Authors of the modpack")));
+		modpackAuthors = StringUtils.join(config.getStringList("authors", CATEGORY_MODPACK_INFO,
+						new String[0], "Authors of the modpack"), ", ");
 		modpackWebsite = (config.get(CATEGORY_MODPACK_INFO, "website", "",
 				"Modpack web address").getString());
 	}

@@ -154,7 +154,7 @@ public final class VersionCheck implements Runnable {
 					"VersionChecker", "addVersionCheck", nbt);
 		}
 
-		if (ModpackInfo.instance.enableOnlineVersionCheck) {
+		if (ModOptions.getOnlineVersionChecking()) {
 			final VersionCheck test = new VersionCheck();
 			FMLCommonHandler.instance().bus().register(test);
 			new Thread(test).start();
