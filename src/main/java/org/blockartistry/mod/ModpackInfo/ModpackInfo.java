@@ -163,6 +163,7 @@ public class ModpackInfo {
 			fType = OutputType.TEXT;
 		}
 
+		proxy.preInit(event, config);
 		config.save();
 	}
 

@@ -6,4 +6,4 @@ mpinfo.authors.text=§ePack Authors: §6{0}§r\n
 mpinfo.noinfo.text=§cNo information available§r\n
 
 # Version checking strings
-msg.NewVersionAvailable=["Â§6Update Available: Â§9[",{"text":"Â§2ModpackInfo Â§ev%sÂ§f","color":"gold","hoverEvent":{"action":"show_text","value":{"text":"Click for CurseForge Project Page","color":"aqua"}},"clickEvent":{"action":"open_url","value":"http://minecraft.curseforge.com/mc-mods/229665-modpackinfo"}},"Â§9]"]
+msg.NewVersionAvailable=["§6Update Available: §9[",{"text":"§2ModpackInfo §ev%s§f","color":"gold","hoverEvent":{"action":"show_text","value":{"text":"Click for CurseForge Project Page","color":"aqua"}},"clickEvent":{"action":"open_url","value":"http://minecraft.curseforge.com/mc-mods/229665-modpackinfo"}},"§9]"]
