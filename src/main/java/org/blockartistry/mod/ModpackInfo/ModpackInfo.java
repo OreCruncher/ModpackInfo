@@ -65,7 +65,7 @@ public class ModpackInfo {
 
 	public static final String MOD_ID = "mpinfo";
 	public static final String MOD_NAME = "ModpackInfo";
-	public static final String VERSION = "0.1.0";
+	public static final String VERSION = "@VERSION@";
 	public static final String DEPENDENCIES = "after:*";
 
 	private static final String FILE_NAME = "ModpackInfo";
