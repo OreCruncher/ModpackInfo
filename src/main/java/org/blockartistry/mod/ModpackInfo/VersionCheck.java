@@ -166,8 +166,8 @@ public final class VersionCheck implements Runnable {
 
 		if (event.player instanceof EntityPlayer) {
 			if (status == UpdateStatus.OUTDATED) {
-				final String msg = StatCollector.translateToLocalFormatted(
-						"msg.NewVersionAvailable", currentVersion);
+				final String msg = StatCollector.translateToLocalFormatted("msg.NewVersionAvailable.mpinfo",
+						ModpackInfo.MOD_NAME, currentVersion, CURSE_PROJECT_NAME);
 				IChatComponent component = IChatComponent.Serializer
 						.func_150699_a(msg);
 				event.player.addChatMessage(component);
